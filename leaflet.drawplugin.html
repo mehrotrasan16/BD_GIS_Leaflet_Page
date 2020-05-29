@@ -1,0 +1,390 @@
+﻿<!DOCTYPE html>
+<html>
+   <head>
+      <title>Water resource management</title>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+      <link rel="stylesheet" href="bulma.min.css" />
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+      <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2.rc.2/leaflet.js"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2.rc.2/leaflet.css" rel="stylesheet" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css" rel="stylesheet" />
+      <link href="./leaflet plugins/Control.MiniMap.css" rel="stylesheet">
+      <script src="./leaflet plugins/Control.MiniMap.js"></script>
+      <script type="text/javascript" src="us-states-shapes.js"></script>  
+   </head>
+   <body>
+      <section class="hero">
+         <div class="hero-head">
+            <nav class="navbar has-text-light" role="navigation" aria-label="main navigation">
+               <div class="navbar-brand">
+               </div>
+               <div id="navbarBasicExample" class="navbar-menu">
+                  <div class="navbar-start">
+                     <div class="navbar-item has-dropdown is-hoverable">
+                        <a class = "navbar-link"> Water Resource Views </a>
+                        <div class="navbar-dropdown">
+                           <a class="navbar-item">
+                           Fresh Water Bodies
+                           </a>
+                           <a class="navbar-item">
+                           Salt Water Bodies
+                           </a>
+                           <a class="navbar-item">
+                           Lakes
+                           </a>
+                           <a class="navbar-item">
+                           Dams and Resevoirs
+                           </a>
+                        </div>
+                     </div>
+                     <div class="navbar-item has-dropdown is-hoverable">
+                        <a class = "navbar-link"> Census Views </a>
+                        <div class="navbar-dropdown">
+                           <a class="navbar-item">
+                           Population per unit area
+                           </a>
+                           <a class="navbar-item">
+                           Residential Areas
+                           </a>
+                        </div>
+                     </div>
+                     <div class="navbar-item has-dropdown is-hoverable">
+                        <a class = "navbar-link"> Weather Views </a>
+                        <div class="navbar-dropdown">
+                           <a class="navbar-item">
+                           Precipitation per area
+                           </a>
+                        </div>
+                     </div>
+                     <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                        Custom Views
+                        </a>
+                        <div class="navbar-dropdown">
+                           <a class="navbar-item">
+                           Reservoir level over 4 years
+                           </a>
+                           <a class="navbar-item">
+                           Ground water purity over next 10 years
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="navbar-end">
+                  </div>
+               </div>
+            </nav>
+         </div>
+         <div class="hero-body">
+            <div class="container">
+               <p class="title">
+                  GeoInfoSystem
+               </p>
+               <p class="subtitle">
+                  Sanket Mehrotra
+               </p>
+            </div>
+         </div>
+         <div class="hero-foot">
+            <!-- <nav class="tabs is-boxed"> -->
+            <!-- <div class="container"> -->
+            <!-- <ul> -->
+            <!-- <li class="is-active"><a>Overview</a></li> -->
+            <!-- <li><a>Modifiers</a></li> -->
+            <!-- <li><a>Grid</a></li> -->
+            <!-- <li><a>Elements</a></li> -->
+            <!-- <li><a>Components</a></li> -->
+            <!-- <li><a>Layout</a></li> -->
+            <!-- </ul> -->
+            <!-- </div> -->
+            <!-- </nav> -->
+         </div>
+      </section>
+      <div class = "columns">
+         <div class="column is-two-thirds">
+         <nav class="breadcrumb" aria-label="breadcrumbs" style="margin-left:5px">
+            <ul>
+               <li><a href="#">United States</a></li>
+               <li><a href="#">Colorado</a></li>
+               <li><a href="#">Fort Collins</a></li>
+               <li class="is-active"><a href="#" aria-current="page">HorseTooth Resevoir(40.552364, -105.153236)</a></li>
+            </ul>
+         </nav>
+         <div id="mapid" style="width: 100%; height: 600px;"></div>
+      </div>
+      <div class="column box">
+		<label> Population Density Overlay  :</label>
+         <label class="switch">
+         <input type="checkbox" onclick="popOverlayHandler(this);">
+         <span class="slider round"></span>
+         </label>
+      </div>
+      </div>
+      <script>
+	  function popOverlayHandler(cb) {
+      if(cb.checked == false){
+		map.removeLayer(geojson);
+	  }
+	  else{
+		map.addLayer(geojson);
+	  }
+}
+	  </script>
+      <style>
+         .switch {
+         position: relative;
+         display: inline-block;
+         width: 60px;
+         height: 34px;
+         }
+         /* Hide default HTML checkbox */
+         .switch input {
+         opacity: 0;
+         width: 0;
+         height: 0;
+         }
+         /* The slider */
+         .slider {
+         position: absolute;
+         cursor: pointer;
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         background-color: #ccc;
+         -webkit-transition: .4s;
+         transition: .4s;
+         }
+         .slider:before {
+         position: absolute;
+         content: "";
+         height: 26px;
+         width: 26px;
+         left: 4px;
+         bottom: 4px;
+         background-color: white;
+         -webkit-transition: .4s;
+         transition: .4s;
+         }
+         input:checked + .slider {
+         background-color: #2196F3;
+         }
+         input:focus + .slider {
+         box-shadow: 0 0 1px #2196F3;
+         }
+         input:checked + .slider:before {
+         -webkit-transform: translateX(26px);
+         -ms-transform: translateX(26px);
+         transform: translateX(26px);
+         }
+         .slider.round {
+         border-radius: 34px;
+         }
+         .slider.round:before {
+         border-radius: 50%;
+         }
+      </style>
+      <script>
+         // center of the map
+         var center = [37.8, -96];
+         
+         // Create the map
+         var map = L.map('mapid').setView(center, 4);;
+         
+         // Set up the OSM layer
+         L.tileLayer(
+         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+         attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
+         maxZoom: 18
+         }).addTo(map);
+         
+         //Read the state data shapes present in us-state.js
+         //add the statesData layer to the map
+         //L.geoJson(statesData).addTo(map);
+         var geoJson; //used later put here for global scope
+      </script>
+      <script type="text/javascript">
+         // Initialise the FeatureGroup to store editable layers
+         var editableLayers = new L.FeatureGroup();
+         map.addLayer(editableLayers);
+         
+         var options = {
+           position: 'topleft',
+           draw: {
+             polygon: {
+               allowIntersection: false, // Restricts shapes to simple polygons
+               drawError: {
+                 color: '#e1e100', // Color the shape will turn when intersects
+                 message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+               },
+               shapeOptions: {
+                 color: '#97009c'
+               }
+             },
+             polyline: {
+             	shapeOptions: {
+                 color: '#f357a1',
+                 weight: 10
+                   }
+             },
+             // disable toolbar item by setting it to false
+             polyline: true,
+             circle: true, // Turns off this drawing tool
+             polygon: true,
+             marker: true,
+             rectangle: true,
+           },
+           edit: {
+             featureGroup: editableLayers, //REQUIRED!!
+             remove: true
+           }
+         };
+         
+         // Initialise the draw control and pass it the FeatureGroup of editable layers
+         var drawControl = new L.Control.Draw(options);
+         map.addControl(drawControl);
+         
+         //var editableLayers = new L.FeatureGroup();
+         //map.addLayer(editableLayers);
+         
+         map.on('draw:created', function(e) {
+           var type = e.layerType,
+             layer = e.layer;
+         
+           if (type === 'polyline') {
+             layer.bindPopup('A polyline!');
+           } else if ( type === 'polygon') {
+           	layer.bindPopup('A polygon!');
+           } else if (type === 'marker') 
+           {layer.bindPopup('marker!');}
+           else if (type === 'circle') 
+           {layer.bindPopup('A circle!');}
+            else if (type === 'rectangle') 
+           {layer.bindPopup('A rectangle!');}
+         
+         
+           editableLayers.addLayer(layer);
+         });         
+               
+      </script>
+      <script type="text/javascript">
+         //Coordinates click action popup
+               var popup = L.popup();
+                     function onMapClick(e) {
+                     	popup
+                     		.setLatLng(e.latlng)
+                     		.setContent("You clicked the map at " + e.latlng.toString())
+                     		.openOn(map);
+                     }
+                     
+                     map.on('click', onMapClick);
+            
+      </script>
+      <script type="text/javascript">
+         function getColor(d) {
+          return d > 1000 ? '#800026' :
+                 d > 500  ? '#BD0026' :
+                 d > 200  ? '#E31A1C' :
+                 d > 100  ? '#FC4E2A' :
+                 d > 50   ? '#FD8D3C' :
+                 d > 20   ? '#FEB24C' :
+                 d > 10   ? '#FED976' :
+                            '#FFEDA0';
+         }
+            function style(feature) {
+            		return {
+            			weight: 2,
+            			opacity: 1,
+            			color: 'white',
+            			dashArray: '3',
+            			fillOpacity: 0.7,
+            			fillColor: getColor(feature.properties.density)
+            		};
+            	}
+            
+            	var geojson = L.geoJson(statesData, {
+            		style: style,
+            	});//.addTo(map);
+      </script>
+      <style>
+         .info {
+         padding: 6px 8px;
+         font: 14px/16px Arial, Helvetica, sans-serif;
+         background: white;
+         background: rgba(255,255,255,0.8);
+         box-shadow: 0 0 15px rgba(0,0,0,0.2);
+         border-radius: 5px;
+         }
+         .info h4 {
+         margin: 0 0 5px;
+         color: #777;
+         }
+      </style>
+      <script type="text/javascript">
+         // control that shows state info on hover
+         var info = L.control();
+         
+         info.onAdd = function (map) {
+         this._div = L.DomUtil.create('div', 'info');
+         this.update();
+         return this._div;
+         };
+         
+         info.update = function (props) {
+         this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
+         '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+         : 'Hover over a state');
+         };
+         
+         info.addTo(map);
+         //Add interactivity to the population density marked in above script block
+         function highlightFeature(e) {
+         var layer = e.target;
+         
+         layer.setStyle({
+           weight: 5,
+           color: '#666',
+           dashArray: '',
+           fillOpacity: 0.7
+         });
+         
+         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+           layer.bringToFront();
+         }
+         info.update(layer.feature.properties);
+         }	  
+         function resetHighlight(e) {
+         geojson.resetStyle(e.target);
+         info.update();
+         }
+         
+         function zoomToFeature(e) {
+         map.fitBounds(e.target.getBounds());
+         }
+         
+         function onEachFeature(feature, layer) {
+         layer.on({
+           mouseover: highlightFeature,
+           mouseout: resetHighlight,
+           click: zoomToFeature
+         });
+         }
+         
+         geojson = L.geoJson(statesData, {
+         style: style,
+         onEachFeature: onEachFeature
+         }).addTo(map);
+      </script>
+      <script type="text/javascript">
+         var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+         var osmAttrib='Map data &copy; OpenStreetMap contributors';
+         //Minimap Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
+         var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13});
+         var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true ,width: 200, height: 200 }).addTo(map);
+      </script>
+   </body>
+</html>
