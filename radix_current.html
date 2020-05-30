@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>Water resource management</title>
+      <title>GeoDSS</title>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
@@ -25,17 +25,33 @@
 	  
 	  <script src="https://demo.creativebulma.net/components/bulma-collapsible/1.0/lib/bulma-collapsible.min.js"></script>
 	  <script src="https://demo.creativebulma.net/components/bulma-collapsible/1.0/lib/index.js"></script>
-	  <link href="./leaflet plugins/bulma-collapsible-docs.css" rel="stylesheet">
+	  <link href="./leaflet plugins/bulma-collapsible.min.css" rel="stylesheet" />
+	  
+	  <link href="https://cdn.rawgit.com/octoshrimpy/bulma-o-steps/master/bulma-steps.css" rel="stylesheet">
+	  
+	  <link href="./leaflet plugins/nouislider.min.css" rel="stylesheet">
+      <script src="./leaflet plugins/nouislider.min.js"></script>
 	  
       <script type="text/javascript" src="us-states-shapes.js"></script>  
 	  
 	  <!-- Load Font Awesome 5 -->
 	  <script defer="" src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script>
 	  
+	<style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
    </head>
    <body>
       <section class="hero">
          <div class="hero-head">
+
             <nav class="navbar has-text-light" role="navigation" aria-label="main navigation">
                <div class="navbar-brand">
                </div>
@@ -95,34 +111,36 @@
                   </div>
                </div>
             </nav>
-         </div>
-         <div class="hero-body">
-            <div class="container">
-               <p class="title">
-                  GeoInfoSystem
+
+		 </div>
+		 <div>
+               <p class="title is-2" >
+                  Radix
                </p>
-               <p class="subtitle">
-                  Sanket Mehrotra
+               <p class="subtitle is-5 " style="color: grey">
+                  GeoInfo decision support system
                </p>
-            </div>
-         </div>
-         <div class="hero-foot">
-            <!-- <nav class="tabs is-boxed"> -->
-            <!-- <div class="container"> -->
-            <!-- <ul> -->
-            <!-- <li class="is-active"><a>Overview</a></li> -->
-            <!-- <li><a>Modifiers</a></li> -->
-            <!-- <li><a>Grid</a></li> -->
-            <!-- <li><a>Elements</a></li> -->
-            <!-- <li><a>Components</a></li> -->
-            <!-- <li><a>Layout</a></li> -->
-            <!-- </ul> -->
-            <!-- </div> -->
-            <!-- </nav> -->
+			</div>
+			<br />
+         <div class="hero-footer">
+            <nav class="tabs is-boxed">
+
+            <ul>
+            <li class="is-active"><a>Country</a></li>
+            <li><a>State</a></li>
+            <li><a>County</a></li>
+            <li><a>PO Box</a></li>
+            <li><a>District</a></li>
+			<li><input class="has-text-light" text="Enter a county, township, city or address"></input></li>
+            </ul>
+
+            </nav>
          </div>
       </section>
+	  <br />
       <div class = "columns">
          <div class="column is-two-thirds" style="width:60%">
+
          <nav class="breadcrumb" aria-label="breadcrumbs" style="margin-left:5px">
             <ul>
                <li><a href="#">United States</a></li>
@@ -135,63 +153,131 @@
       </div>
       <div class="column box">
 	  <div id="accordion_second">
-	<article class="message">
+	<article class="message is-info">
 		<div class="message-header">
 		<label>Upload Dataset</label><a href="#collapsible-message-accordion-second-1" data-action="collapse"><i class="fa fa-angle-down"></i></a>
-			<!-- <p>Question 1 <a href="#collapsible-message-accordion-second-1" data-action="collapse">Collapse/Expand</a></p> -->
 		</div>
 		<div id="collapsible-message-accordion-second-1" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
 			<div class="message-body-content">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis
-				placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum
-				<a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et
-				sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et
-				sem eget, facilisis sodales sem.
+				<button>Click to upload dataset</button>
 			</div>
 		</div>
 	</article>
-	<article class="message">
+	<article class="message is-info">
 		<div class="message-header">
-			<p>Question 2 <a href="#collapsible-message-accordion-second-2" data-action="collapse">Collapse/Expand</a></p>
+			<label>Features</label><a href="#collapsible-message-accordion-second-2" data-action="collapse"><i class="fa fa-angle-down"></i></a>
 		</div>
 		<div id="collapsible-message-accordion-second-2" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
 			<div class="message-body-content">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis
-				placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum
-				<a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et
-				sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et
-				sem eget, facilisis sodales sem.
+				<div class="columns">
+				<div class="column">
+				<div class="select">
+					<select id="ddlFeatures" >
+					<option value="Water Purity">Population Density</option>
+					<option value="Water Level">Underground Water Level</option>
+					<option value="Humidity">Humidity</option>
+					</select>
+				</div>
+				</div>
+				<div class="column">
+					<label> Population Density Overlay  :</label>
+					<label class="switch">
+					<input type="checkbox" onclick="popOverlayHandler(this);" >
+					<span class="slider round"></span>
+					</label>
+					<br/><br /><br/><br />
+					<div class="columns">
+					<div class="column"><label>Date Range</label></div>
+					<div class="column is-two-thirds"><div id="slider"></div></div>
+					</div>					
+					<div>
+					<label> Density > :</label>
+					<label>
+					<input>
+					</label>
+					</div>
+					<br />
+					<button class="button">Apply</button>
+					<script>
+					var slider = document.getElementById('slider');
+					
+					noUiSlider.create(slider, {
+						start: [1982, 2000],
+						step:1,
+						connect: true,
+						range: {
+							'min': 1980,
+							'max': 2020
+						},
+						tooltips: [true,true],
+						format: {
+							from: function(value) {
+									return parseInt(value);
+								},
+							to: function(value) {
+									return parseInt(value);
+								}
+							}
+					});
+					</script>
+				</div>
+				</div>
 			</div>
 		</div>
 	</article>
-	<article class="message">
+	<article class="message is-info">
+	<div class="message-header">
+			<label>History/DFG/Visual Log</label><a href="#collapsible-message-accordion-second-6" data-action="collapse"><i class="fa fa-angle-down"></i></a>
+		</div>
+	<div id="collapsible-message-accordion-second-6" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
+		<div class="message-body-content">
+		 <ul class="steps is-thin has-content-centered">
+			<li class="steps-segment">
+				<span class="steps-marker"><a></a></span>
+				<div class="steps-content">
+				<p class="is-size-4">Step 1</p>
+				<p>Load Population Density View</p>
+				</div>
+			</li>
+			<li class="steps-segment">
+				<span class="steps-marker"></span>
+				<div class="steps-content">
+				<p class="is-size-4">Step 2</p>
+				<p>Adjust time period to after 2000 to present.</p>
+				</div>
+			</li>
+			<li class="steps-segment is-active">
+				<span class="steps-marker"></span>
+				<div class="steps-content">
+				<p class="is-size-4">Step 3</p>
+				<p>Polygon focused: Salt-Lake City County – Larimer County[41.95132, -114.01611] /Idaho Falls – Capital Reef National Park[40.44695, -105.0293]. <p>
+				</div>
+			</li>
+			<!-- <li class="steps-segment"> -->
+				<!-- <span class="steps-marker"></span> -->
+				<!-- <div class="steps-content"> -->
+				<!-- <p class="is-size-4">Step 4</p> -->
+				<!-- <p>The fourth step. Nearly there!</p> -->
+				<!-- </div> -->
+			<!-- </li> -->
+			<!-- <li class="steps-segment"> -->
+				<!-- <span class="steps-marker"></span> -->
+				<!-- <div class="steps-content"> -->
+				<!-- <p class="is-size-4">Step 5</p> -->
+				<!-- <p>And finally the last step. You have successfully completed all 5 steps.</p> -->
+				<!-- </div> -->
+			<!-- </li> -->
+		</ul>
+		</div>
+	</div>
+	</article>
+	<article class="message is-info">
 		<div class="message-header">
-			<p>Question 3 <a href="#collapsible-message-accordion-second-3" data-action="collapse">Collapse/Expand</a></p>
+			<label>Statistics and Visualizations</label><a href="#collapsible-message-accordion-second-3" data-action="collapse"><i class="fa fa-angle-down"></i></a>
 		</div>
 		<div id="collapsible-message-accordion-second-3" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
 			<div class="message-body-content">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis
-				placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum
-				<a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et
-				sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et
-				sem eget, facilisis sodales sem.
-			</div>
-		</div>
-	</article>
-</div>
-		<div  ID="uploadDiv" class="box is-collapsible is-active">
-		<label>Upload Dataset</label>
-		</div>
-		<div id="options2" class="box">
-		<label>Features</label>
-		<select id="ddlFeatures">
-		<option value="Water Purity">Water Purity</option>
-		<option value="Water Level">Water Level</option>
-		<option value="Humidity">Humidity</option>
-		</select>
-		</div>
-		<div class="box">
-			<label>Statistics and Visualizations</label><br/><button class="button"  onclick="showPopup(this);">Configure</button>
+				<button class="button"  onclick="showPopup(this);">Configure</button>
 			<div id="VizPopup"class="modal">
 				<div class="modal-background"></div>
 				<div class="modal-card">
@@ -212,10 +298,14 @@
 			function showPopup(){
 				var element = document.getElementById("VizPopup");
 				element.classList.add("is-active");
+				element.style.zIndex = 999;
+				//map.getPane("mapPane").setZIndex("500");
 			}
 			function hidePopup(){
 				var element = document.getElementById("VizPopup");
 				element.classList.remove("is-active");
+				element.style.zIndex = "auto";
+				//map.getPane("mapPane").setZIndex("auto");
 			}
 			</script>
 			<select>
@@ -223,60 +313,69 @@
 			<option>Bar chart</option>
 			<option>Scatter-plot</option>
 			</select>
-			
+			</div>
 		</div>
-		<div class="box">
-		<label>Text Input query(SQL)(Metadata over Galileo)</label>
-		<input type="textbox">
+	</article>
+	
+	<article class="message is-info">
+	<div class="message-header">
+			<label>Text Input query(SQL)(Metadata over Galileo)</label><a href="#collapsible-message-accordion-second-4" data-action="collapse"><i class="fa fa-angle-down"></i></a>
 		</div>
-		<div class="box">
+	<div id="collapsible-message-accordion-second-4" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
+		<div class="message-body-content">
+		<label>SELECT <input type="textbox"><br/> FROM <input type="textbox"><br/> WHERE <input type="textbox"></label>
+		</div>
+	</div>
+	</article>
+	<article class="message is-info">
+	<div class="message-header">
+			<label>Overlays</label><a href="#collapsible-message-accordion-second-5" data-action="collapse"><i class="fa fa-angle-down"></i></a>
+		</div>
+	<div id="collapsible-message-accordion-second-5" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
+		<div class="message-body-content">
 		<label> Population Density Overlay  :</label>
-         <label class="switch">
-         <input type="checkbox" onclick="popOverlayHandler(this);">
-         <span class="slider round"></span>
-         </label>
-		 <br/>
-		 <label> Precipitation Overlay  :</label>
-         <label class="switch">
-         <input type="checkbox" onclick="">
-         <span class="slider round"></span>
-         </label>
-		 <br/>
-		 <label> Underground Water Level Overlay  :</label>
-         <label class="switch">
-         <input type="checkbox" onclick="">
-         <span class="slider round"></span>
-         </label>
+			<label class="switch">
+			<input type="checkbox" onclick="popOverlayHandler(this);" >
+			<span class="slider round"></span>
+			</label>
+			<br/>
+			<label> Precipitation Overlay  :</label>
+			<label class="switch">
+			<input type="checkbox" onclick="">
+			<span class="slider round"></span>
+			</label>
+			<br/>
+			<label> Underground Water Level Overlay  :</label>
+			<label class="switch">
+			<input type="checkbox" onclick="">
+			<span class="slider round"></span>
+			</label>
 		</div>
+	</div>
+	</article>
+	
+	
+</div>		
       </div>
       </div>
       <script>
 	  function popOverlayHandler(cb) {
       if(cb.checked == false){
 		map.removeLayer(geojson);
+		legend.remove	(map);
 	  }
 	  else{
 		map.addLayer(geojson);
+		legend.addTo(map);
 	  }
 }
-	  </script>
-	  <script>
-	  document.addEventListener('DOMContentLoaded', function() {
-	let cardToggles = document.getElementsByClassName('card-toggle');
-	for (let i = 0; i < cardToggles.length; i++) {
-		cardToggles[i].addEventListener('click', e => {
-			e.currentTarget.parentElement.parentElement.childNodes[3].classList.toggle('is-hidden');
-		});
-	}
-});
-
 	  </script>
       <style>
          .switch {
          position: relative;
          display: inline-block;
-         width: 60px;
-         height: 34px;
+         width: 40px;
+         height: 24px;
          }
          /* Hide default HTML checkbox */
          .switch input {
@@ -299,8 +398,8 @@
          .slider:before {
          position: absolute;
          content: "";
-         height: 26px;
-         width: 26px;
+         height: 16px;
+         width: 16px;
          left: 4px;
          bottom: 4px;
          background-color: white;
@@ -314,9 +413,9 @@
          box-shadow: 0 0 1px #2196F3;
          }
          input:checked + .slider:before {
-         -webkit-transform: translateX(26px);
-         -ms-transform: translateX(26px);
-         transform: translateX(26px);
+         -webkit-transform: translateX(16px);
+         -ms-transform: translateX(16px);
+         transform: translateX(16px);
          }
          .slider.round {
          border-radius: 34px;
@@ -460,7 +559,39 @@
          margin: 0 0 5px;
          color: #777;
          }
+		.legend {
+			line-height: 20px;
+			color: #555;
+		}
+		.legend i {
+			width: 30px;
+			height: 24px;
+			float: left;
+			margin-right: 8px;
+			opacity: 0.7;
+		}
       </style>
+	  <script> 
+	  var legend = L.control({position: 'bottomleft'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+        labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br/><br/>' : '+');
+    }
+
+    return div;
+};
+
+
+	  </script>
       <script type="text/javascript">
          // control that shows state info on hover
          var info = L.control();
