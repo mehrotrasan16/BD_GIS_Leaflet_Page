@@ -1,11 +1,17 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Full Screen Leaflet Map</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.css" />
 	<script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7.3/leaflet.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css">
+
+	<script src="./leaflet plugins/L.Modal.min.js"></script>
+	<link rel="stylesheet" href="./leaflet plugins/leaflet.modal.min.css">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css" rel="stylesheet" />
+	
     <style>
         body {
             padding: 0;
@@ -19,12 +25,8 @@
 </head>
 <body>
     <div id="map"></div>
-
-    <script src="https://d19vzq90twjlae.cloudfront.net/leaflet-0.7/leaflet.js">
-    </script>
-
     <script>
-        var map = L.map('map').setView([-41.2858, 174.78682], 14);
+        var map = L.map('map').setView([37.8, -96], 5);
         mapLink = 
             '<a href="http://openstreetmap.org">OpenStreetMap</a>';
         L.tileLayer(
@@ -32,7 +34,161 @@
             attribution: '&copy; ' + mapLink + ' Contributors',
             maxZoom: 18,
             }).addTo(map);
+			
+		var popup = L.popup();
+            function onMapClick(e) {
+                popup
+                    .setLatLng(e.latlng)
+                    .setContent("You clicked the map at " + e.latlng.toString())
+                    .openOn(map);
+            }
+
+        map.on("click", onMapClick);
     </script>
+	<script>
+	var MyCustomMarker = L.Marker.extend({
+ 
+    bindPopup: function(htmlContent, options) {
+	  			
+		if (options && options.showOnMouseOver) {
+			
+			// call the super method
+			L.Marker.prototype.bindPopup.apply(this, [htmlContent, options]);
+			
+			// unbind the click event
+			this.off("click", this.openPopup, this);
+			
+			// bind to mouse over
+			this.on("mouseover", function(e) {
+				
+				// get the element that the mouse hovered onto
+				var target = e.originalEvent.fromElement || e.originalEvent.relatedTarget;
+				var parent = this._getParent(target, "leaflet-popup");
+ 
+				// check to see if the element is a popup, and if it is this marker's popup
+				if (parent == this._popup._container)
+					return true;
+				
+				// show the popup
+				this.openPopup();
+				
+			}, this);
+			
+			// and mouse out
+			this.on("mouseout", function(e) {
+				
+				// get the element that the mouse hovered onto
+				var target = e.originalEvent.toElement || e.originalEvent.relatedTarget;
+				
+				// check to see if the element is a popup
+				if (this._getParent(target, "leaflet-popup")) {
+ 
+					L.DomEvent.on(this._popup._container, "mouseout", this._popupMouseOut, this);
+					return true;
+ 
+				}
+				
+				// hide the popup
+				this.closePopup();
+				
+			}, this);
+			
+		}
+		
+	},
+ 
+	_popupMouseOut: function(e) {
+	    
+		// detach the event
+		L.DomEvent.off(this._popup, "mouseout", this._popupMouseOut, this);
+ 
+		// get the element that the mouse hovered onto
+		var target = e.toElement || e.relatedTarget;
+		
+		// check to see if the element is a popup
+		if (this._getParent(target, "leaflet-popup"))
+			return true;
+		
+		// check to see if the marker was hovered back onto
+		if (target == this._icon)
+			return true;
+		
+		// hide the popup
+		this.closePopup();
+		
+	},
+	
+	_getParent: function(element, className) {
+		
+		var parent = element.parentNode;
+		
+		while (parent != null) {
+			
+			if (parent.className && L.DomUtil.hasClass(parent, className))
+				return parent;
+			
+			parent = parent.parentNode;
+			
+		}
+		
+		return false;
+		
+	}
+ 
+});
+
+
+var markers = new L.FeatureGroup();
+
+function getRandomLatLng(map) {
+    var bounds = map.getBounds(),
+        southWest = bounds.getSouthWest(),
+        northEast = bounds.getNorthEast(),
+        lngSpan = northEast.lng - southWest.lng,
+        latSpan = northEast.lat - southWest.lat;
+
+    return new L.LatLng(
+    southWest.lat + latSpan * Math.random(),
+    southWest.lng + lngSpan * Math.random());
+}
+
+
+
+function populate() {
+    //for (var i = 0; i < 10; i++) {
+    //    var marker = new MyCustomMarker(getRandomLatLng(map));
+    //    marker.bindPopup("<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p><p>Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque.</p>", {
+    //        showOnMouseOver: true
+    //    });
+    //    markers.addLayer(marker);
+    //}
+	horsetooth = new MyCustomMarker([40.55268, -105.15461]);
+	horsetooth.bindPopup("This is Horsetooth Resevoir, CO.",{showOnMouseOver: true});
+	
+	fossilcreek = new MyCustomMarker([40.48913, -105.01256]);
+	fossilcreek.bindPopup("This is fossil creek Resevoir, CO.",{showOnMouseOver: true});
+	
+	winsdor = new MyCustomMarker([40.53455, -104.88733]);
+	winsdor.bindPopup("This is winsdor Resevoir, CO.",{showOnMouseOver: true});
+	
+	timnath = new MyCustomMarker([40.5459, -104.96098]);
+	timnath.bindPopup("This is timnath Resevoir, CO.",{showOnMouseOver: true});
+	
+	//horsetooth    = L.marker([40.55268, -105.15461]).bindPopup("This is Horsetooth Resevoir, CO.",{showOnMouseOver: true}),
+	//fossilcreek    = L.marker([40.48913, -105.01256]).bindPopup('This is fossil creek resevoir, CO.'),
+	//winsdor    = L.marker([40.53455, -104.88733]).bindPopup('This is winsdor resevoir , CO.');
+	//timnath    = L.marker([40.5459, -104.96098]).bindPopup('This is timnath resevoir , CO.');
+	markers.addLayer(horsetooth);
+	markers.addLayer(fossilcreek);
+	markers.addLayer(winsdor);
+	markers.addLayer(timnath);
+    return false;
+}
+
+map.addLayer(markers);
+
+populate();
+	</script>
+	
 </body>
 </html>
-LICENS

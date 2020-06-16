@@ -1,0 +1,18 @@
+0. Full screen ui dev
+1. County layers - done
+	1a. push states onto minimap - OR -find county level aggregation data - ask Dr Sangmi
+2. add feature filters - combination - js - dynamically done.
+3. analytics popups - sample graph - bulma modal, js
+4. datasets - power station and healthcare, rivers and physical features.
+5. working search for georesolution
+6. actually updating breadcrumb
+
+14/6/20
+1. Translate whole app to MEAN 
+	Translate current interface into Angular
+	Make sample metadata database in mongo(tried Cassandra, but setup takes longer)
+	Set up server in Express.js and Nodejs
+	Change interface interactivity according to mongodb json retrieved per feature.
+
+2. Set up sample db with metadata from different sources ()
+3. 
