@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <title>GeoDSS</title>
     <meta charset="utf-8" />
@@ -14,14 +15,11 @@
     <!--<link href="./leaflet plugins/leaflet.draw.css" rel="stylesheet" />
     <script src="./leaflet plugins/leaflet.draw.js"></script>-->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
     <link href="./leaflet plugins/Control.MiniMap.css" rel="stylesheet" />
     <script src="./leaflet plugins/Control.MiniMap.js"></script>
-
-    <link href="./leaflet plugins/bulma-accordion.min.css" rel="stylesheet" />
-    <script src="./leaflet plugins/bulma-accordion.min.js"></script>
 
     <script src="https://demo.creativebulma.net/components/bulma-collapsible/1.0/lib/bulma-collapsible.min.js"></script>
     <script src="https://demo.creativebulma.net/components/bulma-collapsible/1.0/lib/index.js"></script>
@@ -33,19 +31,35 @@
     <script src="./leaflet plugins/nouislider.min.js"></script>
 
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
-    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
+          rel='stylesheet' />
 
     <script src="./leaflet plugins/leaflet.ajax.min.js"></script>
 
     <script src="./leaflet plugins/L.Modal.min.js"></script>
     <link rel="stylesheet" href="./leaflet plugins/leaflet.modal.min.css">
 
-    <script src="./leaflet plugins/jquery-2.1.1.min.js"></script>
+    <link href="https://unpkg.com/leaflet-geosearch@latest/assets/css/leaflet.css" rel="stylesheet" />
+    <script src="https://unpkg.com/leaflet-geosearch@latest/dist/bundle.min.js"></script>
+
+    <link href=".https://cdn.jsdelivr.net/npm/bulma-calendar@6.0.7/dist/css/bulma-calendar.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bulma-calendar@6.0.7/dist/js/bulma-calendar.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>-->
+    <!--<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />-->
+
+    <script type="text/javascript" src="./dependencies/display.js"></script>
+    <script type="text/javascript" src="./dependencies/sketch_visualizer.js"></script>
 
     <script type="text/javascript" src="us-states-shapes.js"></script>
     <script type="text/javascript" src="./us_counties_geojson/colorado_counties.js"></script>
     <script type="text/javascript" src="./us_counties_geojson/nm_counties.js"></script>
 
+
+
+    <script type="text/javascript" src="modified.js"></script>
     <!-- Load Font Awesome 5 -->
     <script defer="" src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script>
 
@@ -63,917 +77,1258 @@
         }
     </style>
 </head>
+
 <body>
-    <section class="hero">
-        <div class="hero-head">
-            <nav class="navbar has-text-light" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand"></div>
-                <div id="navbarBasicExample" class="navbar-menu">
-                    <div class="navbar-start">
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link"> Water Resource Views </a>
-                            <div class="navbar-dropdown">
-                                <a class="navbar-item">
-                                    Fresh Water Bodies
-                                </a>
-                                <a class="navbar-item">
-                                    Salt Water Bodies
-                                </a>
-                                <a class="navbar-item">
-                                    Lakes
-                                </a>
-                                <a class="navbar-item" onclick="map.addLayer(markers);">
-                                    Dams and Resevoirs
-                                </a>
-                            </div>
-                        </div>
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link"> Census Views </a>
-                            <div class="navbar-dropdown">
-                                <a class="navbar-item" onclick="map.addLayer(geojson);">
-                                    Population density view
-                                </a>
-                                <a class="navbar-item">
-                                    Residential Areas
-                                </a>
-                                <a class="navbar-item" onclick=" map.addLayer(geojsoncolo);  map.addLayer(geojsonnm);">
-                                    State County Views
-                                </a>
-                            </div>
-                        </div>
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link"> Weather Views </a>
-                            <div class="navbar-dropdown">
-                                <a class="navbar-item">
-                                    Precipitation per area
-                                </a>
-                            </div>
-                        </div>
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link">
-                                Custom Views
+<section class="hero">
+    <div class="hero-head">
+        <nav class="navbar has-text-light" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand"></div>
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link"> Water Resource Views </a>
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item">
+                                Fresh Water Bodies
                             </a>
-                            <div class="navbar-dropdown">
-                                <a class="navbar-item">
-                                    Reservoir level over 4 years
-                                </a>
-                                <a class="navbar-item">
-                                    Ground water purity over next 10 years
-                                </a>
-                            </div>
-                        </div>
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="navbar-link">
-                                History
+                            <a class="navbar-item">
+                                Salt Water Bodies
                             </a>
-                            <div class="navbar-dropdown">
-                                <a class="navbar-item">
-                                    Query on 2nd June 2020 3:55 pm
-                                </a>
-                                <a class="navbar-item">
-                                    Query on 1st June 2020 12:00pm
-                                </a>
-                            </div>
+                            <a class="navbar-item">
+                                Lakes
+                            </a>
+                            <a class="navbar-item" onclick="map.addLayer(markers);">
+                                Dams and Resevoirs
+                            </a>
                         </div>
                     </div>
-                    <div class="navbar-end"></div>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link"> Census Views </a>
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item" onclick="map.addLayer(geojson);">
+                                Population density view
+                            </a>
+                            <a class="navbar-item">
+                                Residential Areas
+                            </a>
+                            <a class="navbar-item" onclick=" map.addLayer(geojsoncolo);  map.addLayer(geojsonnm);">
+                                State County Views
+                            </a>
+                        </div>
+                    </div>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link"> Weather Views </a>
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item">
+                                Precipitation per area
+                            </a>
+                        </div>
+                    </div>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            Custom Views
+                        </a>
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item">
+                                Reservoir level over 4 years
+                            </a>
+                            <a class="navbar-item">
+                                Ground water purity over next 10 years
+                            </a>
+                        </div>
+                    </div>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                           Query History
+                        </a>
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item">
+                                Query on 2nd June 2020 3:55 pm
+                            </a>
+                            <a class="navbar-item">
+                                Query on 1st June 2020 12:00pm
+                            </a>
+                        </div>
+                    </div>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            Shape History
+                        </a>
+                        <div class="navbar-dropdown" id="shapehistroydropdown">
+                            <a class="navbar-item">
+                                Rectangle on 2nd June 2020 3:55 pm
+                            </a>
+                            <a class="navbar-item">
+                                Polygon on 1st June 2020 12:00pm
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </nav>
-        </div>
-        <div>
-            <p class="title is-2">
-                Sustain
-            </p>
-            <p class="subtitle is-5" style="color: grey;">
-                GeoInfo decision support system
-            </p>
-        </div>
-        <br />
-        <div class="hero-footer">
-            <nav class="tabs is-boxed">
-                <ul>
-                    <li class="is-active"><a>Country</a></li>
-                    <li><a>State</a></li>
-                    <li><a>County</a></li>
-                    <li><a>PO Box</a></li>
-                    <li><a>District</a></li>
-                    <li><input text="Enter a county, township, city or address" /></li>
-                </ul>
-            </nav>
-        </div>
-    </section>
-    <br />
-    <div class="columns">
-        <div class="column is-two-thirds" style="width: 60%;">
-            <nav class="breadcrumb" aria-label="breadcrumbs" style="margin-left: 5px;">
-                <ul>
-                    <li><a href="#">United States</a></li>
-                    <li><a href="#">Colorado</a></li>
-                    <li><a href="#">Fort Collins</a></li>
-                    <li id="latlongbreadcrumb" class="is-active"><a href="#" aria-current="page">Salt-Lake City County – Larimer County[41.95132, -114.01611]/Idaho Falls – Capital Reef National Park[40.552364, -105.15323]</a></li>
-                </ul>
-            </nav>
-            <div id="mapid" style="width: 100%; height: 600px;"></div>
-        </div>
-        <div class="column box">
-            <div id="accordion_second">
-                <article class="message is-info">
-                    <div class="message-header">
-                        <label>Features</label><a href="#collapsible-message-accordion-second-2" data-action="collapse"><i class="fa fa-angle-down"></i></a>
-                    </div>
-                    <div id="collapsible-message-accordion-second-2" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
-                        <div id="filter-body" class="message-body-content">
-                            <div id="filters" class="columns">
-                                <div class="column">
-                                    <div class="select">
-                                        <select id="ddlFeatures">
-                                            <option value="Pop">Population Density</option>
-                                            <option value="Counties">Counties</option>
-                                            <option value="Cities">Cities</option>
-                                            <option value="Resevoirs">Resevoirs</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <label> Population Density Overlay :</label>
-                                    <label class="switch">
-                                        <input type="checkbox" onclick="popOverlayHandler(this);" />
-                                        <span class="slider round"></span>
-                                    </label>
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <br />
-                                    <div id="featureblock_1" class="columns">
-                                        <div class="column"><label>Date Range</label></div>
-                                        <div class="column is-two-thirds"><div id="slider"></div></div>
-                                    </div>
-                                    <div>
-                                        <label> Density(greater than or less than value (people/sq. mile)):</label>
-                                        <label>
-                                            <input />
-                                        </label>
-                                    </div>
-                                    <br />
-                                    <button class="button">Apply</button>
-                                    <button id="addfilter" class="button" onclick="addNewFilter(this);">Add</button>
-                                    <script>
-                                        var slider = document.getElementById("slider");
-
-                                        noUiSlider.create(slider, {
-                                            start: [1982, 2000],
-                                            step: 1,
-                                            connect: true,
-                                            range: {
-                                                min: 1980,
-                                                max: 2020,
-                                            },
-                                            tooltips: [true, true],
-                                            format: {
-                                                from: function (value) {
-                                                    return parseInt(value);
-                                                },
-                                                to: function (value) {
-                                                    return parseInt(value);
-                                                },
-                                            },
-                                        });
-                                    </script>
-                                    <script>
-                                        function addNewFilter() {
-                                            var el = document.getElementById("filters");
-                                            var clone = el.cloneNode(true);
-                                            //g = document.createElement("div");
-                                            clone.setAttribute("id", "filters" + (Math.random().toString()));
-                                            document.getElementById('filter-body').appendChild(clone);
-                                            var message_body_height = $('#collapsible-message-accordion-second-2').height();
-                                            $('#collapsible-message-accordion-second-2').height(message_body_height + 500);                                            
-                                                                                        
-                                        }
-                                    </script>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-                <article class="message is-info">
-                    <div class="message-header">
-                        <label>History/DFG/Visual Log</label><a href="#collapsible-message-accordion-second-6" data-action="collapse"><i class="fa fa-angle-down"></i></a>
-                    </div>
-                    <div id="collapsible-message-accordion-second-6" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
-                        <div class="message-body-content">
-                            <ul class="steps is-thin has-content-centered">
-                                <li class="steps-segment">
-                                    <span class="steps-marker"><a></a></span>
-                                    <div class="steps-content">
-                                        <p class="is-size-4">Step 1</p>
-                                        <p>Load Population Density View</p>
-                                    </div>
-                                </li>
-                                <li class="steps-segment">
-                                    <span class="steps-marker"></span>
-                                    <div class="steps-content">
-                                        <p class="is-size-4">Step 2</p>
-                                        <p>Adjust time period to after 2000 to present.</p>
-                                    </div>
-                                </li>
-                                <li class="steps-segment is-active">
-                                    <span class="steps-marker"></span>
-                                    <div class="steps-content">
-                                        <p class="is-size-4">Step 3</p>
-                                        <p>Polygon focused: Salt-Lake City County – Larimer County[41.95132, -114.01611] /Idaho Falls – Capital Reef National Park[40.44695, -105.0293].</p>
-                                        <p></p>
-                                    </div>
-                                </li>
-                                <!-- <li class="steps-segment"> -->
-                                <!-- <span class="steps-marker"></span> -->
-                                <!-- <div class="steps-content"> -->
-                                <!-- <p class="is-size-4">Step 4</p> -->
-                                <!-- <p>The fourth step. Nearly there!</p> -->
-                                <!-- </div> -->
-                                <!-- </li> -->
-                                <!-- <li class="steps-segment"> -->
-                                <!-- <span class="steps-marker"></span> -->
-                                <!-- <div class="steps-content"> -->
-                                <!-- <p class="is-size-4">Step 5</p> -->
-                                <!-- <p>And finally the last step. You have successfully completed all 5 steps.</p> -->
-                                <!-- </div> -->
-                                <!-- </li> -->
-                            </ul>
-                        </div>
-                    </div>
-                </article>
-                <article class="message is-info">
-                    <div class="message-header">
-                        <label>Statistics and Visualizations</label><a href="#collapsible-message-accordion-second-3" data-action="collapse"><i class="fa fa-angle-down"></i></a>
-                    </div>
-                    <div id="collapsible-message-accordion-second-3" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
-                        <div class="message-body-content">
-                            <button class="button" onclick="showPopup(this);">Configure</button>
-                            <div id="VizPopup" class="modal">
-                                <div class="modal-background"></div>
-                                <div class="modal-card">
-                                    <header class="modal-card-head">
-                                        <p class="modal-card-title">Plot Configuration</p>
-                                        <button class="delete" aria-label="close" onclick="hidePopup(this);"></button>
-                                    </header>
-                                    <section class="modal-card-body">
-                                        <!-- Content ... -->
-                                        <div class="columns">
-                                            <div class="column">
-                                                <select>
-                                                    <option>Line Chart</option>
-                                                    <option>Bar chart</option>
-                                                    <option>Scatter-plot</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </section>
-                                    <footer class="modal-card-foot">
-                                        <button class="button is-success">Save changes</button>
-                                        <button class="button">Cancel</button>
-                                    </footer>
-                                </div>
-                            </div>
-                            <script>
-                                function showPopup() {
-                                    var element = document.getElementById("VizPopup");
-                                    element.classList.add("is-active");
-                                    element.style.zIndex = 999;
-                                    //map.getPane("mapPane").setZIndex("500");
-                                }
-                                function hidePopup() {
-                                    var element = document.getElementById("VizPopup");
-                                    element.classList.remove("is-active");
-                                    element.style.zIndex = "auto";
-                                    //map.getPane("mapPane").setZIndex("auto");
-                                }
-                            </script>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="message is-info">
-                    <div class="message-header">
-                        <label>Text Input query(SQL)(Metadata over Galileo)</label><a href="#collapsible-message-accordion-second-4" data-action="collapse"><i class="fa fa-angle-down"></i></a>
-                    </div>
-                    <div id="collapsible-message-accordion-second-4" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
-                        <div class="message-body-content">
-                            <label>
-                                SELECT <input type="text" /><br />
-                                FROM <input type="text" /><br />
-                                WHERE <input type="text" />
-                            </label>
-                        </div>
-                    </div>
-                </article>
-                <article class="message is-info">
-                    <div class="message-header">
-                        <label>Overlays</label><a href="#collapsible-message-accordion-second-5" data-action="collapse"><i class="fa fa-angle-down"></i></a>
-                    </div>
-                    <div id="collapsible-message-accordion-second-5" class="message-body is-collapsible" data-parent="accordion_second" data-allow-multiple="true">
-                        <div class="message-body-content">
-                            <label> Population Density Overlay :</label>
-                            <label class="switch">
-                                <input type="checkbox" onclick="popOverlayHandler(this);" />
-                                <span class="slider round"></span>
-                            </label>
-                            <br />
-                            <label> Colorado County Overlay :</label>
-                            <label class="switch">
-                                <input type="checkbox" onclick="colostateOverlayHandler(this);" />
-                                <span class="slider round"></span>
-                            </label>
-                            <br />
-                            <label> New Mexico County Overlay :</label>
-                            <label class="switch">
-                                <input type="checkbox" onclick="nmstateOverlayHandler(this);" />
-                                <span class="slider round"></span>
-                            </label>
-                            <br />
-                            <label> Precipitation Overlay :</label>
-                            <label class="switch">
-                                <input type="checkbox" onclick="" />
-                                <span class="slider round"></span>
-                            </label>
-                            <br />
-                            <label> Underground Water Level Overlay :</label>
-                            <label class="switch">
-                                <input type="checkbox" onclick="" />
-                                <span class="slider round"></span>
-                            </label>
-                        </div>
-                    </div>
-                </article>
+                <div class="navbar-end"></div>
             </div>
+        </nav>
+    </div>
+    <div>
+        <p class="title is-2">
+            Sustain
+        </p>
+        <p class="subtitle is-5" style="color: grey;">
+            GeoInfo decision support system
+        </p>
+    </div>
+    <br />
+    <div class="hero-footer">
+        <nav class="tabs is-boxed">
+            <ul>
+                <li class="is-active"><a>Country</a></li>
+                <li><a>State</a></li>
+                <li><a>County</a></li>
+                <li><a>PO Box</a></li>
+                <li><a>District</a></li>
+                <li><input text="Enter a county, township, city or address" /></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+<br />
+<div class="columns">
+    <div class="column is-two-thirds" style="width: 60%;">
+        <nav class="breadcrumb" aria-label="breadcrumbs" style="margin-left: 5px;">
+            <ul>
+                <li><a href="#">United States</a></li>
+                <li><a href="#">Colorado</a></li>
+                <li><a href="#">Fort Collins</a></li>
+                <li id="latlongbreadcrumb" class="is-active"><a href="#" aria-current="page">Salt-Lake City County
+                    - Larimer County[41.95132, -114.01611]/Idaho Falls - Capital Reef National Park[40.552364,
+                    -105.15323]</a></li>
+            </ul>
+        </nav>
+        <div id="mapid" style="width: 100%; height: 600px;"></div>
+    </div>
+    <div class="column box">
+        <div id="accordion_second">
+            <article class="message is-info">
+                <div class="message-header">
+                    <label>Features</label><a href="#collapsible-message-accordion-second-2"
+                                              data-action="collapse"><i class="fa fa-angle-down"></i></a>
+                </div>
+                <div id="collapsible-message-accordion-second-2" class="message-body is-collapsible"
+                     data-parent="accordion_second" data-allow-multiple="true">
+                    <div id="filter-body" class="message-body-content">
+                        <div id="filters" class="columns">
+                            <div class="column">
+                                <div class="select">
+                                    <select id="ddlFeatures">
+                                        <option value="Pop">Population Density</option>
+                                        <option value="Counties">Counties</option>
+                                        <option value="Cities">Cities</option>
+                                        <option value="Resevoirs">Resevoirs</option>
+                                    </select>
+                                </div>
+                                <br/>
+                                <br/><br/><br/>
+                                <label>Date Range: </label>
+                                <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
+                                <script>
+                                    $(function() {
+                                        $('input[name="daterange"]').daterangepicker({
+                                            opens: 'left'
+                                        }, function(start, end, label) {
+                                            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                                        });
+                                    });
+                                </script>
+                            </div>
+                            <div class="column">
+                                <label> Population Density Overlay :</label>
+                                <label class="switch">
+                                    <input type="checkbox" onclick="popOverlayHandler(this);" />
+                                    <span class="slider round"></span>
+                                </label>
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <div id="featureblock_1" class="columns">
+                                    <div class="column"><label>Year Range</label></div>
+                                    <div class="column is-two-thirds">
+                                        <div id="slider"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label> Density(greater than or less than value (people/sq. mile)):</label>
+                                    <label>
+                                        <input />
+                                    </label>
+                                </div>
+                                <br />
+                                <button class="button">Apply</button>
+                                <button id="addfilter" class="button" onclick="addNewFilter(this);">Add</button>
+                                <script>
+                                    var slider = document.getElementById("slider");
+
+                                    noUiSlider.create(slider, {
+                                        start: [1982, 2000],
+                                        step: 1,
+                                        connect: true,
+                                        range: {
+                                            min: 1980,
+                                            max: 2020,
+                                        },
+                                        tooltips: [true, true],
+                                        format: {
+                                            from: function (value) {
+                                                return parseInt(value);
+                                            },
+                                            to: function (value) {
+                                                return parseInt(value);
+                                            },
+                                        },
+                                    });
+                                </script>
+                                <script>
+                                    function addNewFilter() {
+                                        var el = document.getElementById("filters");
+                                        var clone = el.cloneNode(true);
+                                        //g = document.createElement("div");
+                                        clone.setAttribute("id", "filters" + (Math.random().toString()));
+                                        document.getElementById('filter-body').appendChild(clone);
+                                        var message_body_height = $('#collapsible-message-accordion-second-2').height();
+                                        $('#collapsible-message-accordion-second-2').height(message_body_height + 300);
+
+                                    }
+                                </script>
+                                <button id="btnLaunch" type="button" class="button">Launch</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article class="message is-info">
+                <div class="message-header">
+                    <label>History/DFG/Visual Log</label><a href="#collapsible-message-accordion-second-6"
+                                                            data-action="collapse"><i class="fa fa-angle-down"></i></a>
+                </div>
+                <div id="collapsible-message-accordion-second-6" class="message-body is-collapsible"
+                     data-parent="accordion_second" data-allow-multiple="true">
+                    <div class="message-body-content">
+                        <ul class="steps is-thin has-content-centered">
+                            <li class="steps-segment">
+                                <span class="steps-marker"><a></a></span>
+                                <div class="steps-content">
+                                    <p class="is-size-4">Step 1</p>
+                                    <p>Load Population Density View</p>
+                                </div>
+                            </li>
+                            <li class="steps-segment">
+                                <span class="steps-marker"></span>
+                                <div class="steps-content">
+                                    <p class="is-size-4">Step 2</p>
+                                    <p>Adjust time period to after 2000 to present.</p>
+                                </div>
+                            </li>
+                            <li class="steps-segment is-active">
+                                <span class="steps-marker"></span>
+                                <div class="steps-content">
+                                    <p class="is-size-4">Step 3</p>
+                                    <p>Polygon focused: Salt-Lake City County - Larimer County[41.95132,
+                                        -114.01611] /Idaho Falls - Capital Reef National Park[40.44695, -105.0293].
+                                    </p>
+                                    <p></p>
+                                </div>
+                            </li>
+                            <!-- <li class="steps-segment"> -->
+                            <!-- <span class="steps-marker"></span> -->
+                            <!-- <div class="steps-content"> -->
+                            <!-- <p class="is-size-4">Step 4</p> -->
+                            <!-- <p>The fourth step. Nearly there!</p> -->
+                            <!-- </div> -->
+                            <!-- </li> -->
+                            <!-- <li class="steps-segment"> -->
+                            <!-- <span class="steps-marker"></span> -->
+                            <!-- <div class="steps-content"> -->
+                            <!-- <p class="is-size-4">Step 5</p> -->
+                            <!-- <p>And finally the last step. You have successfully completed all 5 steps.</p> -->
+                            <!-- </div> -->
+                            <!-- </li> -->
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            <article class="message is-info">
+                <div class="message-header">
+                    <label>Statistics and Visualizations</label><a href="#collapsible-message-accordion-second-3"
+                                                                   data-action="collapse"><i class="fa fa-angle-down"></i></a>
+                </div>
+                <div id="collapsible-message-accordion-second-3" class="message-body is-collapsible"
+                     data-parent="accordion_second" data-allow-multiple="true">
+                    <div class="message-body-content">
+                        <button class="button" onclick="showPopup(this);">Configure</button>
+                        <div id="VizPopup" class="modal">
+                            <div class="modal-background"></div>
+                            <div class="modal-card">
+                                <header class="modal-card-head">
+                                    <p class="modal-card-title">Plot Configuration</p>
+                                    <button class="delete" aria-label="close" onclick="hidePopup(this);"></button>
+                                </header>
+                                <section class="modal-card-body">
+                                    <!-- Content ... -->
+                                    <div class="columns">
+                                        <div class="column">
+                                            <select>
+                                                <option>Line Chart</option>
+                                                <option>Bar chart</option>
+                                                <option>Scatter-plot</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </section>
+                                <footer class="modal-card-foot">
+                                    <button class="button is-success">Save changes</button>
+                                    <button class="button">Cancel</button>
+                                </footer>
+                            </div>
+                        </div>
+                        <script>
+                            function showPopup() {
+                                var element = document.getElementById("VizPopup");
+                                element.classList.add("is-active");
+                                element.style.zIndex = 999;
+                                //map.getPane("mapPane").setZIndex("500");
+                            }
+                            function hidePopup() {
+                                var element = document.getElementById("VizPopup");
+                                element.classList.remove("is-active");
+                                element.style.zIndex = "auto";
+                                //map.getPane("mapPane").setZIndex("auto");
+                            }
+                        </script>
+                    </div>
+                </div>
+            </article>
+
+            <article class="message is-info">
+                <div class="message-header">
+                    <label>Text Input query(SQL)(Metadata over Galileo)</label><a
+                        href="#collapsible-message-accordion-second-4" data-action="collapse"><i
+                        class="fa fa-angle-down"></i></a>
+                </div>
+                <div id="collapsible-message-accordion-second-4" class="message-body is-collapsible"
+                     data-parent="accordion_second" data-allow-multiple="true">
+                    <div class="message-body-content">
+                        <label>
+                            SELECT <input type="text" /><br />
+                            FROM <input type="text" /><br />
+                            WHERE <input type="text" />
+                        </label>
+                    </div>
+                </div>
+            </article>
+            <article class="message is-info">
+                <div class="message-header">
+                    <label>Overlays</label><a href="#collapsible-message-accordion-second-5"
+                                              data-action="collapse"><i class="fa fa-angle-down"></i></a>
+                </div>
+                <div id="collapsible-message-accordion-second-5" class="message-body is-collapsible"
+                     data-parent="accordion_second" data-allow-multiple="true">
+                    <div class="message-body-content">
+                        <label> Population Density Overlay :</label>
+                        <label class="switch">
+                            <input type="checkbox" onclick="popOverlayHandler(this);" />
+                            <span class="slider round"></span>
+                        </label>
+                        <br />
+                        <label> Colorado County Overlay :</label>
+                        <label class="switch">
+                            <input type="checkbox" onclick="colostateOverlayHandler(this);" />
+                            <span class="slider round"></span>
+                        </label>
+                        <br />
+                        <label> New Mexico County Overlay :</label>
+                        <label class="switch">
+                            <input type="checkbox" onclick="nmstateOverlayHandler(this);" />
+                            <span class="slider round"></span>
+                        </label>
+                        <br />
+                        <label> Precipitation Overlay :</label>
+                        <label class="switch">
+                            <input type="checkbox" onclick="" />
+                            <span class="slider round"></span>
+                        </label>
+                        <br />
+                        <label> Underground Water Level Overlay :</label>
+                        <label class="switch">
+                            <input type="checkbox" onclick="" />
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </article>
         </div>
     </div>
-    <script>
-        //State Population Density Overlay Handler
-        function popOverlayHandler(cb) {
-            if (cb.checked == false) {
-                map.removeLayer(geojson);
-                legend.remove(map);
-                info.remove(map);
-            } else {
-                map.addLayer(geojson);
-                legend.addTo(map);
-                info.addTo(map);
-            }
+</div>
+<script>
+    //State Population Density Overlay Handler
+    function popOverlayHandler(cb) {
+        if (cb.checked == false) {
+            map.removeLayer(geojson);
+            legend.remove(map);
+            info.remove(map);
+        } else {
+            map.addLayer(geojson);
+            legend.addTo(map);
+            info.addTo(map);
         }
-        function colostateOverlayHandler(cb) {
-            if (cb.checked == false) {
-                map.removeLayer(geojsoncolo);
-            } else {
-                map.addLayer(geojsoncolo);
-            }
+    }
+    function colostateOverlayHandler(cb) {
+        if (cb.checked == false) {
+            map.removeLayer(geojsoncolo);
+        } else {
+            map.addLayer(geojsoncolo);
         }
-        function nmstateOverlayHandler(cb) {
-            if (cb.checked == false) {
-                map.removeLayer(geojsonnm);
-            } else {
-                map.addLayer(geojsonnm);
-            }
+    }
+    function nmstateOverlayHandler(cb) {
+        if (cb.checked == false) {
+            map.removeLayer(geojsonnm);
+        } else {
+            map.addLayer(geojsonnm);
         }
+    }
 
-    </script>
-    <style>
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 24px;
-        }
-            /* Hide default HTML checkbox */
-            .switch input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-        /* The slider */
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            -webkit-transition: 0.4s;
-            transition: 0.4s;
-        }
+</script>
+<style>
+    /*CSS for the nice Swtich controls*/
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 24px;
+    }
 
-            .slider:before {
-                position: absolute;
-                content: "";
-                height: 16px;
-                width: 16px;
-                left: 4px;
-                bottom: 4px;
-                background-color: white;
-                -webkit-transition: 0.4s;
-                transition: 0.4s;
-            }
+    /* Hide default HTML checkbox */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
-        input:checked + .slider {
-            background-color: #2196f3;
-        }
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+    }
 
-        input:focus + .slider {
-            box-shadow: 0 0 1px #2196f3;
-        }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+    }
 
-        input:checked + .slider:before {
-            -webkit-transform: translateX(16px);
-            -ms-transform: translateX(16px);
-            transform: translateX(16px);
-        }
+    input:checked+.slider {
+        background-color: #2196f3;
+    }
 
-        .slider.round {
-            border-radius: 34px;
-        }
+    input:focus+.slider {
+        box-shadow: 0 0 1px #2196f3;
+    }
 
-            .slider.round:before {
-                border-radius: 50%;
-            }
-    </style>
-    <script>
-        // center of the map
-        var center = [37.8, -96];
+    input:checked+.slider:before {
+        -webkit-transform: translateX(16px);
+        -ms-transform: translateX(16px);
+        transform: translateX(16px);
+    }
 
-        // Create the map
-        var map = L.map("mapid").setView(center, 4);
+    .slider.round {
+        border-radius: 34px;
+    }
 
-        // Set up the OSM layer
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: 'Data © <a href="http://osm.org/copyright">OpenStreetMap</a>',
-            maxZoom: 18,
-        }).addTo(map);
+    .slider.round:before {
+        border-radius: 50%;
+    }
+</style>
+<script>
+    // center of the map
+    var center = [37.8, -96];
 
-        //Read the state data shapes present in us-state.js
-        //add the statesData layer to the map
-        //L.geoJson(statesData).addTo(map);
-        var geoJson; //used later put here for global scope
-    </script>
-    <script type="text/javascript">
-        // Initialise the FeatureGroup to store editable layers
-        var editableLayers = new L.FeatureGroup();
-        map.addLayer(editableLayers);
+    // Create the map
+    var map = L.map("mapid").setView(center, 4);
 
-        var options = {
-            position: "topleft",
-            draw: {
-                polygon: {
-                    allowIntersection: false, // Restricts shapes to simple polygons
-                    drawError: {
-                        color: "#e1e100", // Color the shape will turn when intersects
-                        message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
-                    },
-                    shapeOptions: {
-                        color: "#97009c",
-                    },
+    // Set up the OSM layer
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: 'Data : <a href="http://osm.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18,
+    }).addTo(map);
+
+    //Add a scale control to the map
+    L.control.scale().addTo(map);
+
+    //Read the state data shapes present in us-state.js
+    //add the statesData layer to the map
+    //L.geoJson(statesData).addTo(map);
+    var geoJson; //used later put here for global scope
+</script>
+<script type="text/javascript">
+    // Initialise the FeatureGroup to store editable layers
+    var editableLayers = new L.FeatureGroup();
+    map.addLayer(editableLayers);
+
+    var options = {
+        position: "topleft",
+        draw: {
+            polygon: {
+                allowIntersection: false, // Restricts shapes to simple polygons
+                drawError: {
+                    color: "#e1e100", // Color the shape will turn when intersects
+                    message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
                 },
-                polyline: {
-                    shapeOptions: {
-                        color: "#f357a1",
-                        weight: 10,
-                    },
+                shapeOptions: {
+                    color: "#97009c",
                 },
-                // disable toolbar item by setting it to false
-                polyline: true,
-                circle: false, // Turns off this drawing tool
-                polygon: true,
-                marker: true,
-                rectangle: true,
             },
-            edit: {
-                featureGroup: editableLayers, //REQUIRED!!
-                remove: true,
+            polyline: {
+                shapeOptions: {
+                    color: "#f357a1",
+                    weight: 10,
+                },
             },
-        };
+            // disable toolbar item by setting it to false
+            polyline: true,
+            circle: true, // Turns off this drawing tool
+            polygon: true,
+            marker: true,
+            rectangle: true,
+        },
+        edit: {
+            featureGroup: editableLayers, //REQUIRED!!
+            remove: true,
+        },
+    };
 
-        // Initialise the draw control and pass it the FeatureGroup of editable layers
-        var drawControl = new L.Control.Draw(options);
-        map.addControl(drawControl);
+    // Initialise the draw control and pass it the FeatureGroup of editable layers
+    var drawControl = new L.Control.Draw(options);
+    map.addControl(drawControl);
 
-        //var editableLayers = new L.FeatureGroup();
-        //map.addLayer(editableLayers);
+    //var editableLayers = new L.FeatureGroup();
+    //map.addLayer(editableLayers);
 
-        map.on("draw:created", function (e) {
-            var type = e.layerType,
-                layer = e.layer;
+    //map.on("draw:created", function (e) {
+    //var type = e.layerType,
+    //layer = e.layer;
 
-            if (type === "polyline") {
-                layer.bindPopup("A polyline!");
-            } else if (type === "polygon") {
-                layer.bindPopup("A polygon!");
-            } else if (type === "marker") {
-                layer.bindPopup("marker!");
-            } else if (type === "circle") {
-                layer.bindPopup("A circle!");
-            } else if (type === "rectangle") {
-                layer.bindPopup("A rectangle!");
+    //if (type === "polyline") {
+    //layer.bindPopup("A polyline!");
+    //} else if (type === "polygon") {
+    //layer.bindPopup("A polygon!");
+    //} else if (type === "marker") {
+    //layer.bindPopup("marker!");
+    //} else if (type === "circle") {
+    //layer.bindPopup("A circle!");
+    //} else if (type === "rectangle") {
+    //layer.bindPopup("A rectangle!");
+    //}
+
+    //editableLayers.addLayer(layer);
+    //});
+    user_shapes = []
+    map.on(L.Draw.Event.CREATED, function (e) {
+        //draw:created 	PolyLine 	Polygon; Rectangle; Circle; Marker | String Layer that was just created. The type of layer this is. One of: polyline; polygon; rectangle; circle; marker Triggered when a new vector or marker has been created.
+        //type = shape drawn
+        //layer = details of the shape
+
+        var type = e.layerType,
+            layer = e.layer;
+        var latlng;
+
+        if (type === 'marker') {
+            console.log("Marker dropped.")
+            console.log("Marker Location: " + e.layer._latlng)
+            layer.bindPopup("Market at location:" + e.layer._latlng + "\n")
+            user_shapes.push([e.layerType,e.layer._latlng]);
+            latlng = e.layer._latlng;
+        }
+        if (type === 'circle') {
+            console.log("Circle drawn")
+            console.log("E.Layer._latlng(i.e the centroid): " + e.layer._latlng)
+            console.log("E.layer._mRadius(i.e. the radius): " + e.layer._mRadius)
+            user_shapes.push([e.layerType,e.layer._latlng, e.layer._mRadius]);
+            latlng = e.layer._latlng;
+        }
+        if (type === 'rectangle') {
+            console.log("Rectangle drawn")
+            console.log("E.Layer._latlngs: " + e.layer._latlngs)
+            console.log("Number of points, lat-long array length: " + e.layer._latlngs[0].length)
+            console.log("E layer _latlngs object: " + e.layer._latlngs[0])
+
+            var i = 0;
+            var coordinates = [e.layerType];
+            for (i = 0; i < e.layer._latlngs[0].length; i++) {
+                console.log("Shape coordinate " + i + ":" + e.layer._latlngs[0][i])
+                coordinates.push(e.layer._latlngs[0][i]);
             }
+            user_shapes.push(coordinates);
+            latlng = e.layer.getBounds().getCenter();
+        }
+        if (type === 'polygon') {
+            console.log(" Polygon drawn")
+            console.log("E.Layer._latlngs: " + e.layer._latlngs)
+            console.log("Number of points, lat-long array length: " + e.layer._latlngs[0].length)
+            console.log("E layer _latlngs object: " + e.layer._latlngs[0])
 
-            editableLayers.addLayer(layer);
+            var i = 0;
+            var coordinates = [e.layerType];
+            for (i = 0; i < e.layer._latlngs[0].length; i++) {
+                console.log("Shape coordinate " + i + ":" + e.layer._latlngs[0][i])
+                coordinates.push(e.layer._latlngs[0][i]);
+            }
+            user_shapes.push(coordinates);
+            latlng = e.layer.getBounds().getCenter();
+        }
+        if (type === 'polyline') {
+            console.log("Polyline drawn")
+        }
+
+        //layer.bindPopup('<span><b>Shape Name</b></span><br/><input id="shapeName" type="text"/><br/><br/><span><b>Shape Description<b/></span><br/><textarea id="shapeDesc" cols="25" rows="5"></textarea><br/><br/><input type="button" id="okBtn" value="Save" onclick="savedrawnshape(layer)"/>');
+
+        var idIW = L.popup();
+        var content = '<span><b>Shape Name</b></span><br/><input id="shapeName" type="text"/><br/><br/><span><b>Shape Description<b/></span><br/><textarea id="shapeDesc" cols="25" rows="5"></textarea><br/><br/><input type="button" id="okBtn" value="Save"/>';
+        idIW.setContent(content);
+        idIW.setLatLng(latlng); //calculated based on the e.layertype
+        idIW.openOn(map);
+
+        var okaybtn = document.getElementById("okBtn");
+        okaybtn.on("click", function () {
+            var feature = layer.feature = layer.feature || {}; // Intialize layer.feature
+            feature.type = feature.type || "Feature"; // Intialize feature.type
+            var props = feature.properties = feature.properties || {}; // Intialize feature.properties
+            var sName = $('#shapeName').val();
+            var sDesc = $('#shapeDesc').val();
+            props.shapeName = sName;
+            props.shapeDesc = sDesc;
+
+            overlayMaps[sName] = layer;
+            L.control.layers.addOverlay(layer,sName)
+            //L.control.layers(baseMaps, overlayMaps).addTo(map);
+            map.closePopup();
+
         });
-    </script>
-    <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
-    <script>
-        //fullscreen control
-        map.addControl(new L.Control.Fullscreen());
-        map.on('fullscreenchange', function () {
-            if (map.isFullscreen()) {
-                console.log('entered fullscreen');
-                fscrinfo.addTo(map);
 
-            } else {
-                console.log('exited fullscreen');
-                fscrinfo.remove();
+        //overlayMaps.add()
+        //var drawings = editableLayers.getLayers(); //drawnItems is a container for the drawn objects
+        //drawings[drawings.length - 1].title = sName;
+        //drawings[drawings.length - 1].content = sDesc;
+        //map.closePopup();
+
+
+        // Do whatever else you need to. (save to db; add to map etc)
+        editableLayers.addLayer(layer);
+
+    });
+
+
+
+
+    map.on(L.Draw.Event.EDITED, function (e) {
+        //draw:edited 	LayerGroup 	List of all layers just edited on the map. Triggered when layers in the FeatureGroup; initialised with the plugin; have been edited and saved.
+        var type = e.layerType,
+            layer = e.layer;
+        var latlng;
+
+        if (type === 'marker') {
+            console.log("Marker Edited.")
+            console.log("Marker Location: " + e.layer._latlng)
+            layer.bindPopup("Market at location:" + e.layer._latlng + "\n")
+            user_shapes.push([e.layerType,e.layer._latlng]);
+            latlng = e.layer._latlng;
+        }
+        if (type === 'circle') {
+            console.log("Circle drawn")
+            console.log("E.Layer._latlng(i.e the centroid): " + e.layer._latlng)
+            console.log("E.layer._mRadius(i.e. the radius): " + e.layer._mRadius)
+            user_shapes.push([e.layerType,e.layer._latlng, e.layer._mRadius]);
+            latlng = e.layer._latlng;
+        }
+        if (type === 'rectangle') {
+            console.log("Rectangle drawn")
+            console.log("E.Layer._latlngs: " + e.layer._latlngs)
+            console.log("Number of points, lat-long array length: " + e.layer._latlngs[0].length)
+            console.log("E layer _latlngs object: " + e.layer._latlngs[0])
+
+            var i = 0;
+            var coordinates = [e.layerType];
+            for (i = 0; i < e.layer._latlngs[0].length; i++) {
+                console.log("Shape coordinate " + i + ":" + e.layer._latlngs[0][i])
+                coordinates.push(e.layer._latlngs[0][i]);
             }
+            user_shapes.push(coordinates);
+            latlng = e.layer.getBounds().getCenter();
+        }
+        if (type === 'polygon') {
+            console.log(" Polygon drawn")
+            console.log("E.Layer._latlngs: " + e.layer._latlngs)
+            console.log("Number of points, lat-long array length: " + e.layer._latlngs[0].length)
+            console.log("E layer _latlngs object: " + e.layer._latlngs[0])
+
+            var i = 0;
+            var coordinates = [e.layerType];
+            for (i = 0; i < e.layer._latlngs[0].length; i++) {
+                console.log("Shape coordinate " + i + ":" + e.layer._latlngs[0][i])
+                coordinates.push(e.layer._latlngs[0][i]);
+            }
+            user_shapes.push(coordinates);
+            latlng = e.layer.getBounds().getCenter();
+        }
+        if (type === 'polyline') {
+            console.log("Polyline drawn")
+        }
+
+        // horsetooth = new MyCustomMarker([40.55268, -105.15461]);
+        // horsetooth.bindPopup("This is Horsetooth Resevoir, CO.", { showOnMouseOver: true });
+
+        var idIW = new MyCustomMarker(latlng); //calculated based on the e.layertype
+        var content = '<span><b>Shape Name</b></span><br/><input id="shapeName" type="text"/><br/><br/><span><b>Shape Description<b/></span><br/><textarea id="shapeDesc" cols="25" rows="5"></textarea><br/><br/><input type="button" id="okBtn" value="Save" onclick="savedrawnshape()"/>';
+        idIW.bindPopup(content,{ showOnMouseOver: true });
+        //idIW.openOn(map);
+
+    });
+
+    map.on(L.Draw.Event.DELETED, function (e) {
+        //draw:deleted 	LayerGroup 	List of all layers just removed from the map. Triggered when layers have been removed (and saved) from the FeatureGroup.
+    });
+
+    /*
+    draw:drawstart 	String 	The type of layer this is. One of:polyline; polygon; rectangle; circle; marker Triggered when the user has chosen to draw a particular vector or marker.
+    draw:drawstop 	String 	The type of layer this is. One of: polyline; polygon; rectangle; circle; marker Triggered when the user has finished a particular vector or marker.
+    draw:drawvertex 	LayerGroup 	List of all layers just being added from the map. Triggered when a vertex is created on a polyline or polygon.
+    draw:editresize 	ILayer 	Layer that was just moved. Triggered as the user resizes a rectangle or circle.
+    draw:deletestart 	String 	The type of edit this is. One of: remove Triggered when the user starts remove mode by clicking the remove tool button.
+    draw:deletestop 	String 	The type of edit this is. One of: remove Triggered when the user has finished removing shapes (remove mode) and saves.
+    draw:markercontext 	String 	Triggered when a marker is right clicked.
+    */
+</script>
+<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script>
+    //fullscreen control
+    map.addControl(new L.Control.Fullscreen());
+    map.on('fullscreenchange', function () {
+        if (map.isFullscreen()) {
+            console.log('entered fullscreen');
+            fscrinfo.addTo(map);
+
+        } else {
+            console.log('exited fullscreen');
+            fscrinfo.remove();
+        }
+    });
+</script>
+<script type="text/javascript">
+    //Coordinates click action popup
+    var popup = L.popup();
+    function onMapClick(e) {
+        /*popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(map);*/
+        //breadcrumb update
+
+        //log to console
+        console.log("User clicked on point: " + e.latlng.toString());
+    }
+
+    map.on("click", onMapClick);
+
+    function onMapZoom(e) {
+        console.log("User Changed zoom to value: " + map.getZoom())
+        console.log("Zoom center on map: " + map.getCenter())
+    }
+
+    map.on("zoomend", onMapZoom);
+
+
+</script>
+<script type="text/javascript">
+    function getColor(d) {
+        return d > 1000 ? "#800026" : d > 500 ? "#BD0026" : d > 200 ? "#E31A1C" : d > 100 ? "#FC4E2A" : d > 50 ? "#FD8D3C" : d > 20 ? "#FEB24C" : d > 10 ? "#FED976" : "#FFEDA0";
+    }
+    function style(feature) {
+        return {
+            weight: 2,
+            opacity: 1,
+            color: "white",
+            dashArray: "3",
+            fillOpacity: 0.7,
+            fillColor: getColor(feature.properties.density),
+        };
+    }
+
+    var geojson = L.geoJson(statesData, {
+        style: style,
+    }); //.addTo(map);
+</script>
+<style>
+    .info {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        background: white;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+    }
+
+    .info h4 {
+        margin: 0 0 5px;
+        color: #777;
+    }
+
+    .legend {
+        line-height: 20px;
+        color: #555;
+    }
+
+    .legend i {
+        width: 30px;
+        height: 24px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+</style>
+<script>
+    //Legend for Population Density Overlay
+    var legend = L.control({ position: "bottomleft" });
+
+    legend.onAdd = function (map) {
+        var div = L.DomUtil.create("div", "info legend"),
+            grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+            labels = [];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br/><br/>" : "+");
+        }
+
+        return div;
+    };
+</script>
+<script type="text/javascript">
+    // control that shows state info on hover
+    var info = L.control();
+
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create("div", "info");
+        this.update();
+        return this._div;
+    };
+
+    info.update = function (props, state = "") {
+        this._div.innerHTML = "<h4>US Population Density</h4>" + (props ? "<b>" + props.name + ", " + props.state + "</b><br />" + props.density + " people / mi<sup>2</sup>" : "Hover over a state");
+    };
+
+    info.addTo(map);
+
+    //control that shows features in fullscreen
+    var fscrinfo = L.control();
+
+    //L.DomUtil.addClass(fscrinfo, 'leaflet-control-layers-expanded')
+
+    fscrinfo.onAdd = function (map) {
+        this._div = L.DomUtil.create("div", "info");
+        this._div.setAttribute('id', "fullscreenfeaturemenu");
+        this._div.setAttribute('onmouseover', "");
+        this._div.setAttribute('onmouseout', "");
+        this._div.innerHTML += `<H4>Features</H4><br\><H4>Stats & Visualizations</H4><br\><H4>Overlays</H4>`;
+        this.update();
+        return this._div;
+    };
+
+    fscrinfo.update = function (props) {
+
+    }
+
+    //Add interactivity to the population density marked in above script block
+    function highlightFeature(e) {
+        var layer = e.target;
+
+        layer.setStyle({
+            weight: 5,
+            color: "#666",
+            dashArray: "",
+            fillOpacity: 0.7,
         });
-    </script>
-    <script type="text/javascript">
-        //Coordinates click action popup
-        var popup = L.popup();
-        function onMapClick(e) {
-            popup
-                .setLatLng(e.latlng)
-                .setContent("You clicked the map at " + e.latlng.toString())
-                .openOn(map);
-            //breadcrumb update
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
         }
-
-        map.on("click", onMapClick);
-    </script>
-    <script type="text/javascript">
-        function getColor(d) {
-            return d > 1000 ? "#800026" : d > 500 ? "#BD0026" : d > 200 ? "#E31A1C" : d > 100 ? "#FC4E2A" : d > 50 ? "#FD8D3C" : d > 20 ? "#FEB24C" : d > 10 ? "#FED976" : "#FFEDA0";
-        }
-        function style(feature) {
-            return {
-                weight: 2,
-                opacity: 1,
-                color: "white",
-                dashArray: "3",
-                fillOpacity: 0.7,
-                fillColor: getColor(feature.properties.density),
-            };
-        }
-
-        var geojson = L.geoJson(statesData, {
-            style: style,
-        }); //.addTo(map);
-    </script>
-    <style>
-        .info {
-            padding: 6px 8px;
-            font: 14px/16px Arial, Helvetica, sans-serif;
-            background: white;
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-        }
-
-            .info h4 {
-                margin: 0 0 5px;
-                color: #777;
-            }
-
-        .legend {
-            line-height: 20px;
-            color: #555;
-        }
-
-            .legend i {
-                width: 30px;
-                height: 24px;
-                float: left;
-                margin-right: 8px;
-                opacity: 0.7;
-            }
-    </style>
-    <script>
-        //Legend for Population Density Overlay
-        var legend = L.control({ position: "bottomleft" });
-
-        legend.onAdd = function (map) {
-            var div = L.DomUtil.create("div", "info legend"),
-                grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-                labels = [];
-
-            // loop through our density intervals and generate a label with a colored square for each interval
-            for (var i = 0; i < grades.length; i++) {
-                div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "<br/><br/>" : "+");
-            }
-
-            return div;
-        };
-    </script>
-    <script type="text/javascript">
-        // control that shows state info on hover
-        var info = L.control();
-
-        info.onAdd = function (map) {
-            this._div = L.DomUtil.create("div", "info");
-            this.update();
-            return this._div;
-        };
-
-        info.update = function (props,state="") {
-            this._div.innerHTML = "<h4>US Population Density</h4>" + (props ? "<b>" + props.name +", " + props.state + "</b><br />" + props.density + " people / mi<sup>2</sup>" : "Hover over a state");
-        };
-
-        info.addTo(map);
-
-        //control that shows features in fullscreen
-        var fscrinfo = L.control();
-
-        //L.DomUtil.addClass(fscrinfo, 'leaflet-control-layers-expanded')
-
-        fscrinfo.onAdd = function (map) {
-            this._div = L.DomUtil.create("div", "info");
-            this._div.setAttribute('id', "fullscreenfeaturemenu");
-            this._div.setAttribute('onmouseover', "");
-            this._div.setAttribute('onmouseout', "");
-            this._div.innerHTML += `<H4>Features</H4><br\><H4>Stats & Visualizations</H4><br\><H4>Overlays</H4>`;
-            this.update();
-            return this._div;
-        };
-
-        fscrinfo.update = function (props) {
-           
-        }
-
-        //Add interactivity to the population density marked in above script block
-        function highlightFeature(e) {
-            var layer = e.target;
-
-            layer.setStyle({
-                weight: 5,
-                color: "#666",
-                dashArray: "",
-                fillOpacity: 0.7,
-            });
-
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                layer.bringToFront();
-            }
-            if (layer.feature.properties.state) {
-                info.update(layer.feature.properties,layer.feature.properties.state);
-            } else {
-                info.update(layer.feature.properties);
-            }
+        if (layer.feature.properties.state) {
+            info.update(layer.feature.properties, layer.feature.properties.state);
+        } else {
             info.update(layer.feature.properties);
         }
-        function resetHighlight(e) {
-            geojson.resetStyle(e.target);
-            info.update();
-        }
+        info.update(layer.feature.properties);
+    }
+    function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+        info.update();
+    }
 
-        function zoomToFeature(e) {
-            map.fitBounds(e.target.getBounds());
-        }
+    function zoomToFeature(e) {
+        map.fitBounds(e.target.getBounds());
+    }
 
-        function onEachFeature(feature, layer) {
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight,
-                click: zoomToFeature,
-            });
-        }
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: zoomToFeature,
+        });
+    }
 
-        geojson = L.geoJson(statesData, {
-            style: style,
-            onEachFeature: onEachFeature,
-        });//.addTo(map);
-    </script>
+    geojson = L.geoJson(statesData, {
+        style: style,
+        onEachFeature: onEachFeature,
+    });//.addTo(map);
+</script>
 
-    <script type="text/javascript">
-        //Minimap Plugins
-        var osmUrl = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-        var osmAttrib = "Map data &copy; OpenStreetMap contributors";
-        //Minimap Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
-        var osm2 = new L.TileLayer(osmUrl, { minZoom: 0, maxZoom: 13 });
-        var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, width: 200, height: 200 }).addTo(map);
-    </script>
+<script type="text/javascript">
+    //Minimap Plugins
+    var osmUrl = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+    var osmAttrib = "Map data &copy; OpenStreetMap contributors";
+    //Minimap Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
+    var osm2 = new L.TileLayer(osmUrl, { minZoom: 0, maxZoom: 13 });
+    var miniMap = new L.Control.MiniMap(osm2, { toggleDisplay: true, width: 200, height: 200 }).addTo(map);
+</script>
 
-    <script>
-        //Custom marker with popup on mouse hover.
-        var MyCustomMarker = L.Marker.extend({
+<script>
+    //Custom marker with popup on mouse hover.
+    var MyCustomMarker = L.Marker.extend({
 
-            bindPopup: function (htmlContent, options) {
+        bindPopup: function (htmlContent, options) {
 
-                if (options && options.showOnMouseOver) {
+            if (options && options.showOnMouseOver) {
 
-                    // call the super method
-                    L.Marker.prototype.bindPopup.apply(this, [htmlContent, options]);
+                // call the super method
+                L.Marker.prototype.bindPopup.apply(this, [htmlContent, options]);
 
-                    // unbind the click event
-                    this.off("click", this.openPopup, this);
+                // unbind the click event
+                this.off("click", this.openPopup, this);
 
-                    // bind to mouse over
-                    this.on("mouseover", function (e) {
+                // bind to mouse over
+                this.on("mouseover", function (e) {
 
-                        // get the element that the mouse hovered onto
-                        var target = e.originalEvent.fromElement || e.originalEvent.relatedTarget;
-                        var parent = this._getParent(target, "leaflet-popup");
+                    // get the element that the mouse hovered onto
+                    var target = e.originalEvent.fromElement || e.originalEvent.relatedTarget;
+                    var parent = this._getParent(target, "leaflet-popup");
 
-                        // check to see if the element is a popup, and if it is this marker's popup
-                        if (parent == this._popup._container)
-                            return true;
+                    // check to see if the element is a popup, and if it is this marker's popup
+                    if (parent == this._popup._container)
+                        return true;
 
-                        // show the popup
-                        this.openPopup();
+                    // show the popup
+                    this.openPopup();
 
-                    }, this);
+                }, this);
 
-                    // and mouse out
-                    this.on("mouseout", function (e) {
+                // and mouse out
+                this.on("mouseout", function (e) {
 
-                        // get the element that the mouse hovered onto
-                        var target = e.originalEvent.toElement || e.originalEvent.relatedTarget;
+                    // get the element that the mouse hovered onto
+                    var target = e.originalEvent.toElement || e.originalEvent.relatedTarget;
 
-                        // check to see if the element is a popup
-                        if (this._getParent(target, "leaflet-popup")) {
+                    // check to see if the element is a popup
+                    if (this._getParent(target, "leaflet-popup")) {
 
-                            L.DomEvent.on(this._popup._container, "mouseout", this._popupMouseOut, this);
-                            return true;
+                        L.DomEvent.on(this._popup._container, "mouseout", this._popupMouseOut, this);
+                        return true;
 
-                        }
+                    }
 
-                        // hide the popup
-                        this.closePopup();
+                    // hide the popup
+                    this.closePopup();
 
-                    }, this);
-
-                }
-
-            },
-
-            _popupMouseOut: function (e) {
-
-                // detach the event
-                L.DomEvent.off(this._popup, "mouseout", this._popupMouseOut, this);
-
-                // get the element that the mouse hovered onto
-                var target = e.toElement || e.relatedTarget;
-
-                // check to see if the element is a popup
-                if (this._getParent(target, "leaflet-popup"))
-                    return true;
-
-                // check to see if the marker was hovered back onto
-                if (target == this._icon)
-                    return true;
-
-                // hide the popup
-                this.closePopup();
-
-            },
-
-            _getParent: function (element, className) {
-
-                var parent = element.parentNode;
-
-                while (parent != null) {
-
-                    if (parent.className && L.DomUtil.hasClass(parent, className))
-                        return parent;
-
-                    parent = parent.parentNode;
-
-                }
-
-                return false;
+                }, this);
 
             }
 
-        });
+        },
 
+        _popupMouseOut: function (e) {
 
-        var markers = new L.FeatureGroup();
+            // detach the event
+            L.DomEvent.off(this._popup, "mouseout", this._popupMouseOut, this);
 
-        function getRandomLatLng(map) {
-            var bounds = map.getBounds(),
-                southWest = bounds.getSouthWest(),
-                northEast = bounds.getNorthEast(),
-                lngSpan = northEast.lng - southWest.lng,
-                latSpan = northEast.lat - southWest.lat;
+            // get the element that the mouse hovered onto
+            var target = e.toElement || e.relatedTarget;
 
-            return new L.LatLng(
-                southWest.lat + latSpan * Math.random(),
-                southWest.lng + lngSpan * Math.random());
-        }
+            // check to see if the element is a popup
+            if (this._getParent(target, "leaflet-popup"))
+                return true;
 
+            // check to see if the marker was hovered back onto
+            if (target == this._icon)
+                return true;
 
+            // hide the popup
+            this.closePopup();
 
-        function populate() {
-            //for (var i = 0; i < 10; i++) {
-            //    var marker = new MyCustomMarker(getRandomLatLng(map));
-            //    marker.bindPopup("<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p><p>Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque.</p>", {
-            //        showOnMouseOver: true
-            //    });
-            //    markers.addLayer(marker);
-            //}
-            horsetooth = new MyCustomMarker([40.55268, -105.15461]);
-            horsetooth.bindPopup("This is Horsetooth Resevoir, CO.", { showOnMouseOver: true });
+        },
 
-            fossilcreek = new MyCustomMarker([40.48913, -105.01256]);
-            fossilcreek.bindPopup("This is fossil creek Resevoir, CO.", { showOnMouseOver: true });
+        _getParent: function (element, className) {
 
-            winsdor = new MyCustomMarker([40.53455, -104.88733]);
-            winsdor.bindPopup("This is winsdor Resevoir, CO.", { showOnMouseOver: true });
+            var parent = element.parentNode;
 
-            timnath = new MyCustomMarker([40.5459, -104.96098]);
-            timnath.bindPopup("This is timnath Resevoir, CO.", { showOnMouseOver: true });
+            while (parent != null) {
 
-            //horsetooth    = L.marker([40.55268, -105.15461]).bindPopup("This is Horsetooth Resevoir, CO.",{showOnMouseOver: true}),
-            //fossilcreek    = L.marker([40.48913, -105.01256]).bindPopup('This is fossil creek resevoir, CO.'),
-            //winsdor    = L.marker([40.53455, -104.88733]).bindPopup('This is winsdor resevoir , CO.');
-            //timnath    = L.marker([40.5459, -104.96098]).bindPopup('This is timnath resevoir , CO.');
-            markers.addLayer(horsetooth);
-            markers.addLayer(fossilcreek);
-            markers.addLayer(winsdor);
-            markers.addLayer(timnath);
+                if (parent.className && L.DomUtil.hasClass(parent, className))
+                    return parent;
+
+                parent = parent.parentNode;
+
+            }
+
             return false;
+
         }
 
-        //map.addLayer(markers);
+    });
 
-        populate();
-    </script>
 
-    <script>
+    var markers = new L.FeatureGroup();
 
-        function onEachCountyFeature(feature, layer) {
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight,
-                click: zoomToFeature,
-            });
+    function getRandomLatLng(map) {
+        var bounds = map.getBounds(),
+            southWest = bounds.getSouthWest(),
+            northEast = bounds.getNorthEast(),
+            lngSpan = northEast.lng - southWest.lng,
+            latSpan = northEast.lat - southWest.lat;
+
+        return new L.LatLng(
+            southWest.lat + latSpan * Math.random(),
+            southWest.lng + lngSpan * Math.random());
+    }
+
+
+
+    function populate() {
+        //for (var i = 0; i < 10; i++) {
+        //    var marker = new MyCustomMarker(getRandomLatLng(map));
+        //    marker.bindPopup("<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p><p>Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque.</p>", {
+        //        showOnMouseOver: true
+        //    });
+        //    markers.addLayer(marker);
+        //}
+        horsetooth = new MyCustomMarker([40.55268, -105.15461]);
+        horsetooth.bindPopup("This is Horsetooth Resevoir, CO.", { showOnMouseOver: true });
+
+        fossilcreek = new MyCustomMarker([40.48913, -105.01256]);
+        fossilcreek.bindPopup("This is fossil creek Resevoir, CO.", { showOnMouseOver: true });
+
+        winsdor = new MyCustomMarker([40.53455, -104.88733]);
+        winsdor.bindPopup("This is winsdor Resevoir, CO.", { showOnMouseOver: true });
+
+        timnath = new MyCustomMarker([40.5459, -104.96098]);
+        timnath.bindPopup("This is timnath Resevoir, CO.", { showOnMouseOver: true });
+
+        //horsetooth    = L.marker([40.55268, -105.15461]).bindPopup("This is Horsetooth Resevoir, CO.",{showOnMouseOver: true}),
+        //fossilcreek    = L.marker([40.48913, -105.01256]).bindPopup('This is fossil creek resevoir, CO.'),
+        //winsdor    = L.marker([40.53455, -104.88733]).bindPopup('This is winsdor resevoir , CO.');
+        //timnath    = L.marker([40.5459, -104.96098]).bindPopup('This is timnath resevoir , CO.');
+        markers.addLayer(horsetooth);
+        markers.addLayer(fossilcreek);
+        markers.addLayer(winsdor);
+        markers.addLayer(timnath);
+        return false;
+    }
+
+    //map.addLayer(markers);
+
+    populate();
+</script>
+
+<script>
+
+    function onEachCountyFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: zoomToFeature,
+        });
+    }
+</script>
+<script>
+    var littleton = L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.'),
+        denver = L.marker([39.74, -104.99]).bindPopup('This is Denver, CO.'),
+        aurora = L.marker([39.73, -104.8]).bindPopup('This is Aurora, CO.'),
+        golden = L.marker([39.77, -105.23]).bindPopup('This is Golden, CO.');
+
+
+    var cities = L.layerGroup([littleton, denver, aurora, golden]);
+    var grayscale = L.tileLayer(osmUrl, { id: 'MapID', tileSize: 512, zoomOffset: -1, attribution: osmAttrib }),
+        streets = L.tileLayer(osmUrl, { id: 'MapID', tileSize: 512, zoomOffset: -1, attribution: osmAttrib });
+
+    //map.addLayer(grayscale);
+    //map.addLayer(cities);
+    //map.addLayer(geojson);
+
+
+    geojsoncolo = L.geoJson(colocounties, {
+        style: style,
+        onEachFeature: onEachCountyFeature,
+        pointToLayer: function (feature, latlang) {
+            var marker = L.marker(latlng);
+            marker.bindPopup(feature.properties.name + 'county <br/> State: ' + feature.properties.state);
+            return marker;
         }
-    </script>
-    <script>
-        var littleton = L.marker([39.61, -105.02]).bindPopup('This is Littleton, CO.'),
-            denver = L.marker([39.74, -104.99]).bindPopup('This is Denver, CO.'),
-            aurora = L.marker([39.73, -104.8]).bindPopup('This is Aurora, CO.'),
-            golden = L.marker([39.77, -105.23]).bindPopup('This is Golden, CO.');
+    });
+
+    geojsonnm = L.geoJson(nm_counties, {
+        style: style,
+        onEachFeature: onEachCountyFeature,
+        pointToLayer: function (feature, latlang) {
+            var marker = L.marker(latlng);
+            marker.bindPopup(feature.properties.name + 'county <br/> State: ' + feature.properties.state);
+            return marker;
+        }
+    });
+
+    var counties = L.layerGroup([geojsoncolo, geojsonnm]);
+    //map.addLayer(counties);
+    //var geojsonLayer = new L.GeoJSON.AJAX("./us_counties_geojson/nm_counties.geo.json");
+    //geojsonLayer.addTo(map);
 
 
-        var cities = L.layerGroup([littleton, denver, aurora, golden]);
-        var grayscale = L.tileLayer(osmUrl, { id: 'MapID', tileSize: 512, zoomOffset: -1, attribution: osmAttrib }),
-            streets = L.tileLayer(osmUrl, { id: 'MapID', tileSize: 512, zoomOffset: -1, attribution: osmAttrib });
+    var baseMaps = {
+        "Grayscale": grayscale,
+        "Streets": streets,
+        "Google": L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}', { attribution: 'google' })
+    };
 
-        //map.addLayer(grayscale);
-        //map.addLayer(cities);
-        //map.addLayer(geojson);
+    var overlayMaps = {
+        "Cities": cities,
+        "Population Density": geojson,
+        "Reservoirs": markers,
+        "Counties": counties,
+        "Drawn figures": editableLayers
+    };
+    var LayerControl = L.control.layers(baseMaps, overlayMaps);
+    LayerControl.addTo(map);
 
+</script>
+<script>
 
-        geojsoncolo = L.geoJson(colocounties, {
-            style: style,
-            onEachFeature: onEachCountyFeature,
-            pointToLayer: function (feature, latlang) {
-                var marker = L.marker(latlng);
-                marker.bindPopup(feature.properties.name + 'county <br/> State: ' + feature.properties.state);
-                return marker;
-            }
-        });
-
-        geojsonnm = L.geoJson(nm_counties, {
-            style: style,
-            onEachFeature: onEachCountyFeature,
-            pointToLayer: function (feature, latlang) {
-                var marker = L.marker(latlng);
-                marker.bindPopup(feature.properties.name + 'county <br/> State: ' + feature.properties.state);
-                return marker;
-            }
-        });
-
-        var counties = L.layerGroup([geojsoncolo, geojsonnm]);
-        //map.addLayer(counties);
-        //var geojsonLayer = new L.GeoJSON.AJAX("./us_counties_geojson/nm_counties.geo.json");
-        //geojsonLayer.addTo(map);
+    //geosearch controller
+    const search = new GeoSearch.GeoSearchControl({
+        provider: new GeoSearch.OpenStreetMapProvider(),
+        showMarker: true,
+        marker: {
+            // optional: L.Marker    - default L.Icon.Default
+            icon: new L.Icon.Default(),
+            draggable: false,
+        },
+        notFoundMessage: 'Not found',
+    });
+    map.addControl(search);
 
 
-        var baseMaps = {
-            "Grayscale": grayscale,
-            "Streets": streets
-        };
+    //search.resultList.results[0]
+    //search.addMarker(search.resultList.results[0])
+    //map.panTo(new L.LatLng(search.resultList.results[0].y, search.resultList.results[0].x))
 
-        var overlayMaps = {
-            "Cities": cities,
-            "Population Density": geojson,
-            "Reservoirs": markers,
-            "Counties": counties
-        };
-        L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-    </script>
-    <script>
+    //search.resultList = new ResultList({
+    //handleClick: ({ result }): void => {
+    //search.searchElement.input.value = result.label;
+    //search.onSubmit({ query: result.label, data: result });
+    //},
+    //});
 
-        //custom control to expand/collapse on mouse hover
+    //var query_addr = "80521 US"; //search.resultList.results[0].label
+    //// Get the provider, in this case the OpenStreetMap (OSM) provider.
+    //const provider = new GeoSearch.OpenStreetMapProvider()
+    // Query for the address
+    //var query_promise = new GeoSearch.OpenStreetMapProvider().search({ query: query_addr}); //replace query address with search result
+    //// Wait until we have an answer on the Promise
+    //query_promise.then( value => {
+    //for(i=0;i < value.length; i++){
+    //// Success!
+    //var x_coor = value[i].x;
+    //var y_coor = value[i].y;
+    //var label = value[i].label;
+    //// Create a marker for the found coordinates
+    //var marker = L.marker([y_coor,x_coor]).addTo(map) // CAREFULL!!! The first position corresponds to the lat (y) and the second to the lon (x)
+    //// Add a popup to said marker with the address found by geosearch (not the one from the user)
+    //marker.bindPopup("<b>Found location</b><br>"+label).openPopup();
+    //};
+    //}, reason => {
+    //console.log(reason); // Error!
+    //} );
 
-    </script>
+</script>
+<script>
+    //file reader
+    //var count = Object.keys(datapts).length;
+    //for(var x in Object.keys(datapts)){
+    //console.log(datapts.valueOf(x));
+    //for(var y in Object.keys(x)){
+    //console.log(datapts.valueOf(y));
+    //}
+    //}
+    //var points = Object.values(datapts)
+
+    //console.log(points);
+    //for (index = 0; index < points.length; ++index) {
+    //console.log(points[index]);
+    //}
+    //function myFunction(dataFromServer){
+    //var parsedJSON = JSON.parse(dataFromServer.d);
+    //for (var i=0;i<parsedJSON.length;i++) {
+    //alert(parsedJSON[i].Id);
+    //}
+    //}
+    //myFunction(points);
+    var jsonData = JSON.parse(datapts);
+    var latlongarray = [];
+    for (var i = 0; i < jsonData.pointvalues.length; i++) {
+        var counter = jsonData.pointvalues[i];
+        console.log(counter.geohash);
+        console.log(decode_geohash(counter.geohash));
+        latlongarray[i] = decode_geohash(counter.geohash);
+    }
+
+
+    var marker = L.marker([latlongarray[0].lat, latlongarray[0].lon]).addTo(editableLayers);
+    var i = 0;
+    // while (i < data.list.length - 1) {
+    //     weatherMarker[i] = new L.marker([data.list[i].coord.lat, data.list[i].coord.lon], { draggable: false });
+    //     map.addLayer(weatherMarker[i]);
+    // }
+    var weatherMarker = []
+    while (i < 10) {
+        weatherMarker[i] = new L.marker([latlongarray[i].lat, latlongarray[i].lon], { draggable: false });
+        map.addLayer(weatherMarker[i]);
+        i++;
+    }
+
+</script>
+<script>
+    var el = document.getElementById("btnLaunch");
+    el.on("click",function (e) {
+        //capture rectangle
+
+
+    })
+</script>
 </body>
+
 </html>
