@@ -1352,6 +1352,19 @@
 
 </script>
 <script>
+    var i = 0;
+    var targetlayer;
+    for(i = 0 ;i < LayerControl._layers.length; i++){
+        console.log(LayerControl._layers[i].name  )
+        var searchtext = "midwest";
+        if(searchtext.toLowerCase() === LayerControl._layers[i].name.toLowerCase()){
+            targetlayer = LayerControl._layers[i];
+        }
+    }
+
+    console.log(targetlayer);
+</script>
+<script>
     var el = document.getElementById("btnLaunch");
     //Get all shapes on map
     //
