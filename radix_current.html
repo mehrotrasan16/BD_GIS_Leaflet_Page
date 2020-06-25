@@ -751,8 +751,7 @@
             props.shapeDesc = sDesc;
 
             overlayMaps[sName] = layer;
-            //L.control.layers.addOverlay(layer,sName)
-            L.control.layers(baseMaps, overlayMaps).addTo(map);
+            LayerControl.addOverlay(layer,sName);
             map.closePopup();
 
         });
@@ -1308,6 +1307,7 @@
 
 </script>
 <script>
+    //dynamic marker plotting of points
     //file reader
     //var count = Object.keys(datapts).length;
     //for(var x in Object.keys(datapts)){
@@ -1339,27 +1339,22 @@
     }
 
 
-    var marker = L.marker([latlongarray[0].lat, latlongarray[0].lon]).addTo(editableLayers);
+    //var marker = L.marker([latlongarray[0].lat, latlongarray[0].lon]).addTo(editableLayers);
     var i = 0;
-    // while (i < data.list.length - 1) {
-    //     weatherMarker[i] = new L.marker([data.list[i].coord.lat, data.list[i].coord.lon], { draggable: false });
-    //     map.addLayer(weatherMarker[i]);
-    // }
     var weatherMarker = []
     while (i < 10) {
-        weatherMarker[i] = new L.marker([latlongarray[i].lat, latlongarray[i].lon], { draggable: false });
-        map.addLayer(weatherMarker[i]);
+        weatherMarker[i] = new L.marker([latlongarray[i].lat, latlongarray[i].lon], { draggable: false }).addTo(editableLayers);
+
+
+        //map.addLayer(weatherMarker[i]);
         i++;
     }
 
 </script>
 <script>
     var el = document.getElementById("btnLaunch");
-    el.on("click",function (e) {
-        //capture rectangle
-
-
-    })
+    //Get all shapes on map
+    //
 </script>
 </body>
 
