@@ -57,11 +57,14 @@
     <!--<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />-->
 
     <script type="text/javascript" src="./dependencies/display.js"></script>
-    <script type="text/javascript" src="./dependencies/sketch_visualizer.js"></script>
+    <!--<script type="text/javascript" src="./dependencies/sketch_visualizer.js"></script>-->
+    <!--<script type="text/javascript" src="./dependencies/grpc_querier.js"></script>-->
+    <script type="text/javascript" src="main.js"></script>
 
     <script type="text/javascript" src="us-states-shapes.js"></script>
     <script type="text/javascript" src="./us_counties_geojson/colorado_counties.js"></script>
     <script type="text/javascript" src="./us_counties_geojson/nm_counties.js"></script>
+    <script type="text/javascript" src="./us_counties_geojson/tx_counties.js"></script>
 
 
 
@@ -145,7 +148,7 @@
                     </div>
                     <div class="navbar-item has-dropdown is-hoverable">
                         <a class="navbar-link">
-                           Query History
+                            Query History
                         </a>
                         <div class="navbar-dropdown">
                             <a class="navbar-item">
@@ -232,44 +235,51 @@
                                     </select>
                                 </div>
                                 <br/>
-                                <br/><br/><br/>
+                                <br/>
+                                <div id="shapeselector" class="field">
+                                    <label >Select Layer to apply transformation on: </label>
+                                    <select  class="control" id="ddlshapeselector" data-allow-multiple="true"></select>
+                                </div>
+                                <br/>
+                                <div id="daterangecontrols">
                                 <label>Date Range: </label>
                                 <input type="date" id="Fromdaterange" class="input">
                                 <input type="date" id="Todaterange" class="input">
-                                <script>
-                                    //import bulmaCalendar from "./leaflet plugins/bulma-calendar/src/js";
-                                    import datepicker from "./leaflet plugins/bulma-calendar/bulma-calendar.js"
-                                    var calendars = datepicker.attach('daterange');
-                                    // bulmaCalendar.attach('#datepickerDemoDefault', {
-                                    //     displayMode: 'dialog',
-                                    //     startDate: new Date(),
-                                    //     minDate: '01/01/1920',
-                                    //     maxDate: '12/31/2500',
-                                    //     isRange: true,
-                                    //
-                                    //
-                                    // });
+                                <!--<script>-->
+                                    <!--//import bulmaCalendar from "./leaflet plugins/bulma-calendar/src/js";-->
+                                    <!--//import datepicker from "./leaflet plugins/bulma-calendar/bulma-calendar.js"-->
+                                    <!--var calendars = datepicker.attach('daterange');-->
+                                    <!--// bulmaCalendar.attach('#datepickerDemoDefault', {-->
+                                    <!--//     displayMode: 'dialog',-->
+                                    <!--//     startDate: new Date(),-->
+                                    <!--//     minDate: '01/01/1920',-->
+                                    <!--//     maxDate: '12/31/2500',-->
+                                    <!--//     isRange: true,-->
+                                    <!--//-->
+                                    <!--//-->
+                                    <!--// });-->
 
-                                    //const element = document.querySelector('#datepickerDemoDefault');
+                                    <!--//const element = document.querySelector('#datepickerDemoDefault');-->
 
-                                    if (element) {
-                                        // bulmaCalendar instance is available as element.bulmaCalendar
-                                        element.bulmaCalendar.on('select', function(datepicker) {
-                                            console.log(datepicker.data.value());
-                                        });
-                                    }
+                                    <!--if (element) {-->
+                                        <!--// bulmaCalendar instance is available as element.bulmaCalendar-->
+                                        <!--element.bulmaCalendar.on('select', function(datepicker) {-->
+                                            <!--console.log(datepicker.data.value());-->
+                                        <!--});-->
+                                    <!--}-->
 
-                                </script>
+                                <!--</script>-->
                                 <!--<input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />-->
                                 <!--<script>-->
-                                    <!--$(function() {-->
-                                        <!--$('input[name="daterange"]').daterangepicker({-->
-                                            <!--opens: 'left'-->
-                                        <!--}, function(start, end, label) {-->
-                                            <!--console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));-->
-                                        <!--});-->
-                                    <!--});-->
+                                <!--$(function() {-->
+                                <!--$('input[name="daterange"]').daterangepicker({-->
+                                <!--opens: 'left'-->
+                                <!--}, function(start, end, label) {-->
+                                <!--console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));-->
+                                <!--});-->
+                                <!--});-->
                                 <!--</script>-->
+                                </div>
                             </div>
                             <div class="column">
                                 <label> Population Density Overlay :</label>
@@ -280,13 +290,12 @@
                                 <br />
                                 <br />
                                 <br />
-                                <br />
-                                <div id="featureblock_1" class="columns">
-                                    <div class="column"><label>Year Range</label></div>
-                                    <div class="column is-two-thirds">
-                                        <div id="slider"></div>
-                                    </div>
-                                </div>
+                                <!--<div id="featureblock_1" class="columns">-->
+                                    <!--<div class="column"><label>Year Range</label></div>-->
+                                    <!--<div class="column is-two-thirds">-->
+                                        <!--<div id="slider"></div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
                                 <div>
                                     <label> Density(greater than or less than value (people/sq. mile)):</label>
                                     <label>
@@ -294,30 +303,32 @@
                                     </label>
                                 </div>
                                 <br />
-                                <button class="button">Apply</button>
-                                <button id="addfilter" class="button" onclick="addNewFilter(this);">Add</button>
-                                <script>
-                                    var slider = document.getElementById("slider");
+                                <br />
 
-                                    noUiSlider.create(slider, {
-                                        start: [1982, 2000],
-                                        step: 1,
-                                        connect: true,
-                                        range: {
-                                            min: 1980,
-                                            max: 2020,
-                                        },
-                                        tooltips: [true, true],
-                                        format: {
-                                            from: function (value) {
-                                                return parseInt(value);
-                                            },
-                                            to: function (value) {
-                                                return parseInt(value);
-                                            },
-                                        },
-                                    });
-                                </script>
+                                <!--<button class="button">Apply</button>-->
+                                <button id="addfilter" class="button" onclick="addNewFilter(this);">Add</button>
+                                <!--<script>-->
+                                    <!--var slider = document.getElementById("slider");-->
+
+                                    <!--noUiSlider.create(slider, {-->
+                                        <!--start: [1982, 2000],-->
+                                        <!--step: 1,-->
+                                        <!--connect: true,-->
+                                        <!--range: {-->
+                                            <!--min: 1980,-->
+                                            <!--max: 2020,-->
+                                        <!--},-->
+                                        <!--tooltips: [true, true],-->
+                                        <!--format: {-->
+                                            <!--from: function (value) {-->
+                                                <!--return parseInt(value);-->
+                                            <!--},-->
+                                            <!--to: function (value) {-->
+                                                <!--return parseInt(value);-->
+                                            <!--},-->
+                                        <!--},-->
+                                    <!--});-->
+                                <!--</script>-->
                                 <script>
                                     function addNewFilter() {
                                         var el = document.getElementById("filters");
@@ -330,7 +341,74 @@
 
                                     }
                                 </script>
-                                <button id="btnLaunch" type="button" class="button">Launch</button>
+                                <button id="btnLaunch" class="button" onclick="captureArguments();">Launch</button>
+                                <script>
+                                    //continuatiuon of above search block
+                                    //after locating the target layer, get its coordinates and encode it into a geohash, list of geohashes
+
+                                    /*it is possible that the shape encompasses multiple geohash boxes.
+                                    * First idea - pass the lat_lng of the vertices and get the geohashes for each */
+                                    var query_args = {};
+                                    var targetlayer;
+                                    var targetgeohash = [];
+                                    function captureArguments(){
+
+                                        //Capturing Feature Name
+                                        var e = document.getElementById("ddlshapeselector");
+                                        var selectedValue = e.options[e.selectedIndex].value;
+                                        var selectedIndex = e.selectedIndex;
+                                        console.log(selectedIndex,selectedValue, " is the feature selected by the user");
+
+                                        //Getting Layer details from name
+
+                                        var i = 0;
+                                        var searchtext = selectedValue;
+                                        for(i = 0 ;i < LayerControl._layers.length; i++){
+                                            console.log(LayerControl._layers[i].name  );
+
+                                            if(searchtext.toLowerCase() === LayerControl._layers[i].name.toLowerCase()){
+                                                targetlayer = LayerControl._layers[i];
+                                            }
+                                        }
+                                        if(targetlayer==null){
+                                            var drawnshapes = editableLayers.getLayers();
+                                            console.log(drawnshapes.length);
+                                            targetlayer = drawnshapes.pop();
+                                        }
+
+                                        console.log("Found target layer: ",  targetlayer);
+                                        console.log(targetlayer.layer._latlngs);
+                                        console.log(targetlayer.layer._latlngs[0]);
+                                        //console.log(targetlayer.layer._latlngs[0][0].lat,targetlayer.layer._latlngs[0][0].lng);
+                                        for(i=0;i < targetlayer.layer._latlngs[0].length;i++){
+                                            console.log(
+                                                encode_geohash(
+                                                    targetlayer.layer._latlngs[0][i].lat,
+                                                    targetlayer.layer._latlngs[0][i].lng,
+                                                    3
+                                                )
+                                            );
+                                            targetgeohash.push(encode_geohash(
+                                                targetlayer.layer._latlngs[0][i].lat,
+                                                targetlayer.layer._latlngs[0][i].lng,
+                                                3
+                                                )
+                                            );
+
+                                        }
+                                    }
+                                    var fromdate = document.getElementById('Fromdaterange');
+                                    var todate = document.getElementById('Todaterange');
+
+                                    console.log(fromdate.valueAsNumber);
+                                    console.log(todate.valueAsNumber);
+                                    query_args["from"] = fromdate.valueAsNumber;
+                                    query_args["to"] = todate.valueAsNumber;
+
+                                    var sk = Sketch_Visualizer
+                                    sk.initialize(10);
+                                    //Testing the search for intersecting GeoHashes function
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -752,6 +830,9 @@
 
             overlayMaps[sName] = layer;
             LayerControl.addOverlay(layer,sName);
+
+            var newcatOptions = "<option>" + sName + "</option>";
+            document.getElementById("ddlshapeselector").innerHTML += newcatOptions;
             map.closePopup();
 
         });
@@ -1233,7 +1314,18 @@
         }
     });
 
-    var counties = L.layerGroup([geojsoncolo, geojsonnm]);
+    geojsontx = L.geoJson(tx_counties, {
+        style: style,
+        onEachFeature: onEachCountyFeature,
+        pointToLayer: function (feature, latlang) {
+            var marker = L.marker(latlng);
+            marker.bindPopup(feature.properties.name + 'county <br/> State: ' + feature.properties.state);
+            return marker;
+        }
+    });
+
+
+    var counties = L.layerGroup([geojsoncolo, geojsonnm, geojsontx]);
     //map.addLayer(counties);
     //var geojsonLayer = new L.GeoJSON.AJAX("./us_counties_geojson/nm_counties.geo.json");
     //geojsonLayer.addTo(map);
@@ -1329,6 +1421,8 @@
     //}
     //}
     //myFunction(points);
+
+    //reading points written into js file
     var jsonData = JSON.parse(datapts);
     var latlongarray = [];
     for (var i = 0; i < jsonData.pointvalues.length; i++) {
@@ -1338,37 +1432,116 @@
         latlongarray[i] = decode_geohash(counter.geohash);
     }
 
-
-    //var marker = L.marker([latlongarray[0].lat, latlongarray[0].lon]).addTo(editableLayers);
     var i = 0;
     var weatherMarker = []
-    while (i < 10) {
+    for (i = 0 ; i < latlongarray.length; i++) {
         weatherMarker[i] = new L.marker([latlongarray[i].lat, latlongarray[i].lon], { draggable: false }).addTo(editableLayers);
-
-
         //map.addLayer(weatherMarker[i]);
-        i++;
     }
 
 </script>
+<!--<script>-->
+    <!--//search for layers in layer control-->
+    <!--var i = 0;-->
+    <!--var targetlayer;-->
+    <!--for(i = 0 ;i < LayerControl._layers.length; i++){-->
+        <!--console.log(LayerControl._layers[i].name  )-->
+        <!--var searchtext = "midwest";-->
+        <!--if(searchtext.toLowerCase() === LayerControl._layers[i].name.toLowerCase()){-->
+            <!--targetlayer = LayerControl._layers[i];-->
+        <!--}-->
+    <!--}-->
+
+    <!--console.log(targetlayer);-->
+<!--</script>-->
+<!--<script>-->
+    <!--//continuatiuon of above search block-->
+    <!--//after locating the target layer, get its coordinates and encode it into a geohash, list of geohashes-->
+
+    <!--/*it is possible that the shape encompasses multiple geohash boxes.-->
+    <!--* First idea - pass the lat_lng of the vertices and get the geohashes for each */-->
+
+    <!--var i = 0;-->
+    <!--var targetlayer;-->
+    <!--var targetgeohash = [];-->
+    <!--for(i = 0 ;i < LayerControl._layers.length; i++){-->
+        <!--console.log(LayerControl._layers[i].name  );-->
+        <!--var searchtext = "midwest";-->
+        <!--if(searchtext.toLowerCase() === LayerControl._layers[i].name.toLowerCase()){-->
+            <!--targetlayer = LayerControl._layers[i];-->
+        <!--}-->
+    <!--}-->
+    <!--if(targetlayer==null){-->
+        <!--var drawnshapes = editableLayers.getLayers();-->
+        <!--console.log(drawnshapes.length);-->
+        <!--targetlayer = drawnshapes.pop();-->
+    <!--}-->
+
+    <!--console.log(targetlayer);-->
+    <!--console.log(targetlayer.layer._latlngs);-->
+    <!--console.log(targetlayer.layer._latlngs[0]);-->
+    <!--console.log(targetlayer.layer._latlngs[0][0].lat,targetlayer.layer._latlngs[0][0].lng);-->
+    <!--for(i=0;i < targetlayer.layer._latlngs.length;i++){-->
+        <!--console.log(-->
+            <!--encode_geohash(-->
+                <!--targetlayer.layer._latlngs[0][i].lat,-->
+                <!--targetlayer.layer._latlngs[0][i].lng,-->
+                <!--3-->
+            <!--)-->
+        <!--);-->
+        <!--targetgeohash.push(encode_geohash(-->
+            <!--targetlayer.layer._latlngs[0][i].lat,-->
+            <!--targetlayer.layer._latlngs[0][i].lng,-->
+            <!--3-->
+            <!--)-->
+        <!--);-->
+
+    <!--}-->
+    <!--//console.log(sketch_visualizer()._searchForIntersectingGeohashes(this._standardizeBounds(targetlayer.layer._latlngs[0][0].lat,targetlayer.layer._latlngs[0][0].lng)))-->
+<!--</script>-->
 <script>
-    var i = 0;
-    var targetlayer;
-    for(i = 0 ;i < LayerControl._layers.length; i++){
-        console.log(LayerControl._layers[i].name  )
-        var searchtext = "midwest";
-        if(searchtext.toLowerCase() === LayerControl._layers[i].name.toLowerCase()){
-            targetlayer = LayerControl._layers[i];
+    var grpc = grpc_querier();
+
+    //we have got 4 geohashes will query general first, finetune later
+    var spacePred = grpc._getSpatialScopePredicate(targetgeohash);
+
+    var fromdate = document.getElementById('Fromdaterange')
+    var todate = document.getElementById('Todaterange')
+
+    console.log(fromdate.valueAsNumber)
+    console.log(todate.valueAsNumber)
+
+    var timePred = grpc._getTemporalExpresion(fromdate.valueAsNumber,todate.valueAsNumber);
+
+    var stream = grpc.getStreamForQuery("noaa_2015_jan",targetgeohash,fromdate.valueAsNumber,todate.valueAsNumber);
+
+    console.log(stream);
+
+</script>
+<script>
+    //populate shapeselection dropdown control
+    var ddl = document.getElementById('ddlshapeselector');
+    //var LayerControl = L.control.layers(baseMaps, overlayMaps);
+
+    var i =0;
+
+    if (LayerControl._layerslength == 0) document.getElementById("ddlshapeselector").innerHTML = "<option></option>";
+    else {
+        var catOptions = "";
+        for(i =0; i < LayerControl._layers.length; i++){
+            if(LayerControl._layers[i].overlay == true){
+                catOptions += "<option>" + LayerControl._layers[i].name + "</option>";
+            }
         }
-    }
+        document.getElementById("ddlshapeselector").innerHTML = catOptions;
 
-    console.log(targetlayer);
+
+    }
 </script>
 <script>
-    var el = document.getElementById("btnLaunch");
-    //Get all shapes on map
-    //
+    console.log(sketch_visualizer()._searchForIntersectingGeohashes(this._standardizeBounds(targetlayer.layer._latlngs[0][0].lat,targetlayer.layer._latlngs[0][0].lng)))
 </script>
+
 </body>
 
 </html>
