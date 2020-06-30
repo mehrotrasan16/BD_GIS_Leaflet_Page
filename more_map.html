@@ -41,11 +41,6 @@
     <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
           rel='stylesheet' />
 
-    <script src="./leaflet plugins/leaflet.ajax.min.js"></script>
-
-    <script src="./leaflet plugins/L.Modal.min.js"></script>
-    <link rel="stylesheet" href="./leaflet plugins/leaflet.modal.min.css">
-
     <script src="./leaflet plugins/jquery-2.1.1.min.js"></script>
 
     <link href="https://unpkg.com/leaflet-geosearch@latest/assets/css/leaflet.css" rel="stylesheet" />
@@ -53,8 +48,12 @@
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>-->
-    <!--<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+
 
     <script type="text/javascript" src="./dependencies/display.js"></script>
     <!--<script type="text/javascript" src="./dependencies/sketch_visualizer.js"></script>-->
@@ -62,6 +61,7 @@
     <script type="text/javascript" src="main.js"></script>
 
     <script type="text/javascript" src="us-states-shapes.js"></script>
+    <script type="text/javascript" src="Datasetfeatures.js"></script>
     <script type="text/javascript" src="./us_counties_geojson/colorado_counties.js"></script>
     <script type="text/javascript" src="./us_counties_geojson/nm_counties.js"></script>
     <script type="text/javascript" src="./us_counties_geojson/tx_counties.js"></script>
@@ -88,10 +88,24 @@
 </head>
 
 <body>
+<style>
+    .navbar-dropdown{
+        z-index: 999;
+    }
+</style>
 <section class="hero">
     <div class="hero-head">
         <nav class="navbar has-text-light" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand"></div>
+            <div class="navbar-brand">
+                <div class="">
+                    <p class="title is-2">
+                        Sustain
+                    </p>
+                    <p class="subtitle is-5" style="color: grey;">
+                        GeoInfo decision support system
+                    </p>
+                </div>
+            </div>
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-start">
                     <div class="navbar-item has-dropdown is-hoverable">
@@ -173,343 +187,223 @@
                         </div>
                     </div>
                 </div>
-                <div class="navbar-end"></div>
+                <div class="navbar-end">
+                    <nav class="level">
+                        <!-- Left side -->
+                        <div class="level-left">
+
+                        </div>
+                        <!-- Right side -->
+                        <div class="level-right">
+                            <p class="level-item"><a id="btnShowHideControl" class="button is-info" onclick="showHideControls();"><i class="fa fa-bars"></i></a></p>
+                            <script>
+                                function showHideControls(){
+                                    var element = document.getElementById("controls");
+                                    var visible = element.getAttribute("display");
+                                    console.log("controls are ", visible);
+                                    if(visible == null){
+                                        element.style.display='none';
+                                    }
+                                    if(visible == "none"){
+                                        element.style.display='block';
+                                    }
+                                    if(visible == "block"){
+                                        element.style.display='block';
+                                    }
+                                }
+
+                            </script>
+                        </div>
+                    </nav>
+                </div>
             </div>
         </nav>
     </div>
-    <div>
-        <p class="title is-2">
-            Sustain
-        </p>
-        <p class="subtitle is-5" style="color: grey;">
-            GeoInfo decision support system
-        </p>
-    </div>
-    <br />
     <div class="hero-footer">
-        <nav class="tabs is-boxed">
-            <ul>
-                <li class="is-active"><a>Country</a></li>
-                <li><a>State</a></li>
-                <li><a>County</a></li>
-                <li><a>PO Box</a></li>
-                <li><a>District</a></li>
-                <li><input text="Enter a county, township, city or address" /></li>
-            </ul>
-        </nav>
+        <!-- Main container -->
     </div>
 </section>
 <br />
-<div class="columns">
-    <div class="column is-two-thirds" style="width: 60%;">
-        <nav class="breadcrumb" aria-label="breadcrumbs" style="margin-left: 5px;">
-            <ul>
-                <li><a href="#">United States</a></li>
-                <li><a href="#">Colorado</a></li>
-                <li><a href="#">Fort Collins</a></li>
-                <li id="latlongbreadcrumb" class="is-active"><a href="#" aria-current="page">Salt-Lake City County
-                    - Larimer County[41.95132, -114.01611]/Idaho Falls - Capital Reef National Park[40.552364,
-                    -105.15323]</a></li>
-            </ul>
-        </nav>
-        <div id="mapid" style="width: 100%; height: 600px;"></div>
-    </div>
-    <div class="column box">
-        <div id="accordion_second">
-            <article class="message is-info">
-                <div class="message-header">
-                    <label>Features</label><a href="#collapsible-message-accordion-second-2"
-                                              data-action="collapse"><i class="fa fa-angle-down"></i></a>
-                </div>
-                <div id="collapsible-message-accordion-second-2" class="message-body is-collapsible"
-                     data-parent="accordion_second" data-allow-multiple="true">
-                    <div id="filter-body" class="message-body-content">
-                        <div id="filters" class="columns">
-                            <div class="column">
-                                <div class="select">
-                                    <select id="ddlFeatures">
-                                        <option value="Pop">Population Density</option>
-                                        <option value="Counties">Counties</option>
-                                        <option value="Cities">Cities</option>
-                                        <option value="Resevoirs">Resevoirs</option>
+<style>
+    .fix-footer {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        overflow:hidden;
+    }
+</style>
+<footer class="footer">
+    <div class="columns">
+        <div class="column is-three-fifths" style="width: 60%;">
+            <div id="mapid" style="width: 100%; height: 600px;"></div>
+        </div>
+        <div class="column box" id="controls" style="resize:vertical;overflow:auto;">
+            <div id="accordion_second">
+                <article class="message is-info">
+                    <div class="message-header">
+                        <label>Features</label><a href="#collapsible-message-accordion-second-2"
+                                                  data-action="collapse"><i class="fa fa-angle-down"></i></a>
+                    </div>
+                    <!--Add the 'is-collapsible' class to collapsible-message-accordion-second-2 to make it collapsible again-->
+                    <div id="collapsible-message-accordion-second-2" class="message-body" data-parent="accordion_second" data-allow-multiple="true">
+                        <div id="filter-body" class="message-body-content">
+                            <div id="filters" class="columns">
+                                <div class="column">
+                                    <div class="field" id="datasetcontrol">
+                                    <label >Dataset: </label>
+                                        <select id="ddlDataset" class="control" onchange="populateFeatures();" onload="populateFeatures();">
+                                            <option>Census</option>
+                                            <option>Water Resources</option>
+                                            <option>Infrastructure</option>
+                                            <option>Resevoirs</option>
+                                                <option>NAM Data</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="featurecontrol" class="field">
+                                    <label>Features:</label>
+                                    <select id="ddlFeatures" class="control" onload="populateFeatures();">
                                     </select>
-                                </div>
-                                <br/>
-                                <br/>
-                                <div id="shapeselector" class="field">
-                                    <label >Select Layer to apply transformation on: </label>
-                                    <select  class="control" id="ddlshapeselector" data-allow-multiple="true"></select>
-                                </div>
-                                <br/>
-                                <div id="daterangecontrols">
-                                <label>Date Range: </label>
-                                <input type="date" id="Fromdaterange" class="input">
-                                <input type="date" id="Todaterange" class="input">
-                                <!--<script>-->
-                                    <!--//import bulmaCalendar from "./leaflet plugins/bulma-calendar/src/js";-->
-                                    <!--//import datepicker from "./leaflet plugins/bulma-calendar/bulma-calendar.js"-->
-                                    <!--var calendars = datepicker.attach('daterange');-->
-                                    <!--// bulmaCalendar.attach('#datepickerDemoDefault', {-->
-                                    <!--//     displayMode: 'dialog',-->
-                                    <!--//     startDate: new Date(),-->
-                                    <!--//     minDate: '01/01/1920',-->
-                                    <!--//     maxDate: '12/31/2500',-->
-                                    <!--//     isRange: true,-->
-                                    <!--//-->
-                                    <!--//-->
-                                    <!--// });-->
+                                    <script>
+                                        //a hack to preload the features by launching a change event on page load
+                                        var element = document.getElementById('ddlDataset');
+                                        var event = new Event('change');
+                                        element.dispatchEvent(event);
 
-                                    <!--//const element = document.querySelector('#datepickerDemoDefault');-->
+                                        function populateFeatures(){
+                                            var e = document.getElementById("ddlDataset");
+                                            document.getElementById("ddlFeatures").innerHTML = "";
+                                            var selectedValue = e.options[e.selectedIndex].value;
+                                            var selectedIndex = e.selectedIndex;
+                                            switch (selectedValue.toLowerCase()) {
+                                                case "census":
+                                                    var features = Object.keys(censusfeatures);
+                                                    var subs = Object.values(censusfeatures);
+                                                    var combo = Object.entries(censusfeatures);
+                                                    for(i = 0; i < features.length;i++){
+                                                        var newcatOptions = "<option>" + features[i] + "</option>";
+                                                        document.getElementById("ddlFeatures").innerHTML += newcatOptions;
+                                                    }
 
-                                    <!--if (element) {-->
-                                        <!--// bulmaCalendar instance is available as element.bulmaCalendar-->
-                                        <!--element.bulmaCalendar.on('select', function(datepicker) {-->
-                                            <!--console.log(datepicker.data.value());-->
-                                        <!--});-->
-                                    <!--}-->
+                                                    break;
+                                                case "water resources":
+                                                    var features = Object.keys(waterfeatures);
+                                                    var subs = Object.values(waterfeatures);
+                                                    var combo = Object.entries(waterfeatures);
+                                                    for(i = 0; i < features.length;i++){
+                                                        var newcatOptions = "<option>" + features[i] + "</option>";
+                                                        document.getElementById("ddlFeatures").innerHTML += newcatOptions;
+                                                    }
+                                                    break;
+                                                case "infrastructure":
+                                                    // var features = Object.keys(infrafeatures);
+                                                    // var subs = Object.values(infrafeatures);
+                                                    // var combo = Object.entries(infrafeatures);
+                                                    for(i = 0; i < infrafeatures.length;i++){
+                                                        var newcatOptions = "<option>" + infrafeatures[i] + "</option>";
+                                                        document.getElementById("ddlFeatures").innerHTML += newcatOptions;
+                                                    }
+                                                    break;
+                                            }
+                                        }
 
-                                <!--</script>-->
-                                <!--<input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />-->
-                                <!--<script>-->
-                                <!--$(function() {-->
-                                <!--$('input[name="daterange"]').daterangepicker({-->
-                                <!--opens: 'left'-->
-                                <!--}, function(start, end, label) {-->
-                                <!--console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));-->
-                                <!--});-->
-                                <!--});-->
-                                <!--</script>-->
-                                </div>
-                            </div>
-                            <div class="column">
-                                <label> Population Density Overlay :</label>
-                                <label class="switch">
-                                    <input type="checkbox" onclick="popOverlayHandler(this);" />
-                                    <span class="slider round"></span>
-                                </label>
-                                <br />
-                                <br />
-                                <br />
-                                <!--<div id="featureblock_1" class="columns">-->
-                                    <!--<div class="column"><label>Year Range</label></div>-->
-                                    <!--<div class="column is-two-thirds">-->
-                                        <!--<div id="slider"></div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <div>
-                                    <label> Density(greater than or less than value (people/sq. mile)):</label>
-                                    <label>
-                                        <input />
-                                    </label>
-                                </div>
-                                <br />
-                                <br />
-
-                                <!--<button class="button">Apply</button>-->
-                                <button id="addfilter" class="button" onclick="addNewFilter(this);">Add</button>
-                                <!--<script>-->
-                                    <!--var slider = document.getElementById("slider");-->
-
-                                    <!--noUiSlider.create(slider, {-->
-                                        <!--start: [1982, 2000],-->
-                                        <!--step: 1,-->
-                                        <!--connect: true,-->
-                                        <!--range: {-->
-                                            <!--min: 1980,-->
-                                            <!--max: 2020,-->
-                                        <!--},-->
-                                        <!--tooltips: [true, true],-->
-                                        <!--format: {-->
-                                            <!--from: function (value) {-->
-                                                <!--return parseInt(value);-->
-                                            <!--},-->
-                                            <!--to: function (value) {-->
-                                                <!--return parseInt(value);-->
-                                            <!--},-->
-                                        <!--},-->
-                                    <!--});-->
-                                <!--</script>-->
-                                <script>
-                                    function addNewFilter() {
-                                        var el = document.getElementById("filters");
-                                        var clone = el.cloneNode(true);
-                                        //g = document.createElement("div");
-                                        clone.setAttribute("id", "filters" + (Math.random().toString()));
-                                        document.getElementById('filter-body').appendChild(clone);
-                                        var message_body_height = $('#collapsible-message-accordion-second-2').height();
-                                        $('#collapsible-message-accordion-second-2').height(message_body_height + 300);
-
-                                    }
-                                </script>
-                                <button id="btnLaunch" class="button" onclick="captureArguments();">Launch</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-            <article class="message is-info">
-                <div class="message-header">
-                    <label>History/DFG/Visual Log</label><a href="#collapsible-message-accordion-second-6"
-                                                            data-action="collapse"><i class="fa fa-angle-down"></i></a>
-                </div>
-                <div id="collapsible-message-accordion-second-6" class="message-body is-collapsible"
-                     data-parent="accordion_second" data-allow-multiple="true">
-                    <div class="message-body-content">
-                        <ul class="steps is-thin has-content-centered">
-                            <li class="steps-segment">
-                                <span class="steps-marker"><a></a></span>
-                                <div class="steps-content">
-                                    <p class="is-size-4">Step 1</p>
-                                    <p>Load Population Density View</p>
-                                </div>
-                            </li>
-                            <li class="steps-segment">
-                                <span class="steps-marker"></span>
-                                <div class="steps-content">
-                                    <p class="is-size-4">Step 2</p>
-                                    <p>Adjust time period to after 2000 to present.</p>
-                                </div>
-                            </li>
-                            <li class="steps-segment is-active">
-                                <span class="steps-marker"></span>
-                                <div class="steps-content">
-                                    <p class="is-size-4">Step 3</p>
-                                    <p>Polygon focused: Salt-Lake City County - Larimer County[41.95132,
-                                        -114.01611] /Idaho Falls - Capital Reef National Park[40.44695, -105.0293].
-                                    </p>
-                                    <p></p>
-                                </div>
-                            </li>
-                            <!-- <li class="steps-segment"> -->
-                            <!-- <span class="steps-marker"></span> -->
-                            <!-- <div class="steps-content"> -->
-                            <!-- <p class="is-size-4">Step 4</p> -->
-                            <!-- <p>The fourth step. Nearly there!</p> -->
-                            <!-- </div> -->
-                            <!-- </li> -->
-                            <!-- <li class="steps-segment"> -->
-                            <!-- <span class="steps-marker"></span> -->
-                            <!-- <div class="steps-content"> -->
-                            <!-- <p class="is-size-4">Step 5</p> -->
-                            <!-- <p>And finally the last step. You have successfully completed all 5 steps.</p> -->
-                            <!-- </div> -->
-                            <!-- </li> -->
-                        </ul>
-                    </div>
-                </div>
-            </article>
-            <article class="message is-info">
-                <div class="message-header">
-                    <label>Statistics and Visualizations</label><a href="#collapsible-message-accordion-second-3"
-                                                                   data-action="collapse"><i class="fa fa-angle-down"></i></a>
-                </div>
-                <div id="collapsible-message-accordion-second-3" class="message-body is-collapsible"
-                     data-parent="accordion_second" data-allow-multiple="true">
-                    <div class="message-body-content">
-                        <button class="button" onclick="showPopup(this);">Configure</button>
-                        <div id="VizPopup" class="modal">
-                            <div class="modal-background"></div>
-                            <div class="modal-card">
-                                <header class="modal-card-head">
-                                    <p class="modal-card-title">Plot Configuration</p>
-                                    <button class="delete" aria-label="close" onclick="hidePopup(this);"></button>
-                                </header>
-                                <section class="modal-card-body">
-                                    <!-- Content ... -->
-                                    <div class="columns">
-                                        <div class="column">
-                                            <select>
-                                                <option>Line Chart</option>
-                                                <option>Bar chart</option>
-                                                <option>Scatter-plot</option>
-                                            </select>
+                                    </script>
+                                    </div>
+                                    <div id="shapeselector" class="field">
+                                        <label >Spatial coverage: </label>
+                                        <select  class="control" id="ddlshapeselector" data-allow-multiple="true"></select>
+                                    </div>
+                                    <br/>
+                                    <div id="daterangecontrols">
+                                        <label>Date range: </label>
+                                        <div class="control">
+                                            <label class="radio">
+                                                <input type="radio" name="foobar" value="7">
+                                                Last week
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" name="foobar" value="30" checked>
+                                                Last Month
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" name="foobar" value="180">
+                                                Last 6 Months
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" name="foobar" value="365">
+                                                Last 1 Year
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" name="foobar" value="-1">
+                                                Custom
+                                            </label>
+                                        </div>
+                                        <div id="daterangecontrol">
+                                            <!--<input type="date" id="Fromdaterange" class="input">-->
+                                            <!--<input type="date" id="Todaterange" class="input">-->
+                                            <!--</script>-->
+                                            <!--<input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />-->
+                                            <!--<script>-->
+                                            <!--$(function() {-->
+                                            <!--$('input[name="daterange"]').daterangepicker({-->
+                                            <!--opens: 'left'-->
+                                            <!--}, function(start, end, label) {-->
+                                            <!--console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));-->
+                                            <!--});-->
+                                            <!--});-->
+                                            <!--</script>-->
+                                            <label>Start: </label>
+                                            <input type="text" id="startdatepicker" disabled="disabled">
+                                            <label>End:</label>
+                                            <input type="text" id="enddatepicker" disabled="disabled">
                                         </div>
                                     </div>
-                                </section>
-                                <footer class="modal-card-foot">
-                                    <button class="button is-success">Save changes</button>
-                                    <button class="button">Cancel</button>
-                                </footer>
+                                    <script>
+                                        var startpicker = new Pikaday({
+                                            field: document.getElementById('startdatepicker'),
+                                            setDefaultDate: true,
+                                            defaultDate: new Date(),
+                                            yearRange: [2000,2020],
+                                            onSelect: function(){
+                                                //console.log(this.)
+                                            }
+                                        });
+                                        var endpicker = new Pikaday({
+                                            field: document.getElementById('enddatepicker'),
+                                            setDefaultDate: true,
+                                            defaultDate: new Date(),
+                                            yearRange: [2000,2020],
+                                            onSelect: function(){
+                                                //console.log(this.)
+                                            }
+                                        });
+                                    </script>
+                                </div>
+                                <!--<div class="column">-->
+                                    <!--<button id="addfilter" class="button" onclick="addNewFilter(this);">Add</button>-->
+                                    <!--<script>-->
+                                        <!--function addNewFilter() {-->
+                                            <!--var el = document.getElementById("filters");-->
+                                            <!--var clone = el.cloneNode(true);-->
+                                            <!--//g = document.createElement("div");-->
+                                            <!--clone.setAttribute("id", "filters" + (Math.random().toString()));-->
+                                            <!--document.getElementById('filter-body').appendChild(clone);-->
+                                            <!--var message_body_height = $('#collapsible-message-accordion-second-2').height();-->
+                                            <!--$('#collapsible-message-accordion-second-2').height(message_body_height + 300);-->
+
+                                        <!--}-->
+                                    <!--</script>-->
+                                    <!--<button id="btnLaunch" class="button" onclick="captureArguments();">Launch</button>-->
+                                <!--</div>-->
                             </div>
                         </div>
-                        <script>
-                            function showPopup() {
-                                var element = document.getElementById("VizPopup");
-                                element.classList.add("is-active");
-                                element.style.zIndex = 999;
-                                //map.getPane("mapPane").setZIndex("500");
-                            }
-                            function hidePopup() {
-                                var element = document.getElementById("VizPopup");
-                                element.classList.remove("is-active");
-                                element.style.zIndex = "auto";
-                                //map.getPane("mapPane").setZIndex("auto");
-                            }
-                        </script>
                     </div>
-                </div>
-            </article>
-
-            <article class="message is-info">
-                <div class="message-header">
-                    <label>Text Input query(SQL)(Metadata over Galileo)</label><a
-                        href="#collapsible-message-accordion-second-4" data-action="collapse"><i
-                        class="fa fa-angle-down"></i></a>
-                </div>
-                <div id="collapsible-message-accordion-second-4" class="message-body is-collapsible"
-                     data-parent="accordion_second" data-allow-multiple="true">
-                    <div class="message-body-content">
-                        <label>
-                            SELECT <input type="text" /><br />
-                            FROM <input type="text" /><br />
-                            WHERE <input type="text" />
-                        </label>
-                    </div>
-                </div>
-            </article>
-            <article class="message is-info">
-                <div class="message-header">
-                    <label>Overlays</label><a href="#collapsible-message-accordion-second-5"
-                                              data-action="collapse"><i class="fa fa-angle-down"></i></a>
-                </div>
-                <div id="collapsible-message-accordion-second-5" class="message-body is-collapsible"
-                     data-parent="accordion_second" data-allow-multiple="true">
-                    <div class="message-body-content">
-                        <label> Population Density Overlay :</label>
-                        <label class="switch">
-                            <input type="checkbox" onclick="popOverlayHandler(this);" />
-                            <span class="slider round"></span>
-                        </label>
-                        <br />
-                        <label> Colorado County Overlay :</label>
-                        <label class="switch">
-                            <input type="checkbox" onclick="colostateOverlayHandler(this);" />
-                            <span class="slider round"></span>
-                        </label>
-                        <br />
-                        <label> New Mexico County Overlay :</label>
-                        <label class="switch">
-                            <input type="checkbox" onclick="nmstateOverlayHandler(this);" />
-                            <span class="slider round"></span>
-                        </label>
-                        <br />
-                        <label> Precipitation Overlay :</label>
-                        <label class="switch">
-                            <input type="checkbox" onclick="" />
-                            <span class="slider round"></span>
-                        </label>
-                        <br />
-                        <label> Underground Water Level Overlay :</label>
-                        <label class="switch">
-                            <input type="checkbox" onclick="" />
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                </div>
-            </article>
+                </article>
+            </div>
         </div>
     </div>
-</div>
+</footer>
+
 <script>
     //State Population Density Overlay Handler
     function popOverlayHandler(cb) {
@@ -1451,11 +1345,15 @@
 
         }
     }
-    var fromdate = document.getElementById('Fromdaterange');
-    var todate = document.getElementById('Todaterange');
 
-    query_args["from"] = fromdate.valueAsNumber;
-    query_args["to"] = todate.valueAsNumber;
+    //commented due to new pikaday plugin usage
+    // var fromdate = document.getElementById('Fromdaterange');
+    // var todate = document.getElementById('Todaterange');
+    //
+    // query_args["from"] = fromdate.valueAsNumber;
+    // query_args["to"] = todate.valueAsNumber;
+    query_args["from"] = startpicker.getDate().getTime();
+    query_args["to"] = endpicker.getDate().getTime();
 
     var sk = Sketch_Visualizer;
     sk.initialize(10);
@@ -1468,15 +1366,18 @@
     //we have got 4 geohashes will query general first, finetune later
     var spacePred = grpc._getSpatialScopePredicate(targetgeohash);
 
-    var fromdate = document.getElementById('Fromdaterange')
-    var todate = document.getElementById('Todaterange')
+    //commented due to new pikaday plugin usage
+    // var fromdate = document.getElementById('Fromdaterange')
+    // var todate = document.getElementById('Todaterange')
+    //console.log(fromdate.valueAsNumber)
+    //console.log(todate.valueAsNumber)
 
-    console.log(fromdate.valueAsNumber)
-    console.log(todate.valueAsNumber)
+    query_args["from"] = startpicker.getDate().getTime();
+    query_args["to"] = endpicker.getDate().getTime();
 
-    var timePred = grpc._getTemporalExpresion(fromdate.valueAsNumber,todate.valueAsNumber);
+    var timePred = grpc._getTemporalExpresion(query_args["from"],query_args["to"]);
 
-    var stream = grpc.getStreamForQuery("noaa_2015_jan",targetgeohash,fromdate.valueAsNumber,todate.valueAsNumber);
+    var stream = grpc.getStreamForQuery("noaa_2015_jan",targetgeohash,query_args["from"],query_args["to"]);
 
     console.log(stream);
 
@@ -1488,6 +1389,45 @@
         targetlayer = drawnshapes.pop();
     }
     console.log(sketch_visualizer()._searchForIntersectingGeohashes(this._standardizeBounds(targetlayer.layer._latlngs[0][0].lat,targetlayer.layer._latlngs[0][0].lng)))
+</script>
+<<script>
+    //code to get active date radio button
+
+    var activeradio;
+    // function logactivedateradio(){
+    //     var rad = document.getElementsByClassName("foobar");
+    //     var prev = null;
+    //     for(var i = 0; i < rad.length; i++) {
+    //         rad[i].addEventListener('click', function() {
+    //             console.log('Previous:', prev ? prev.value : null);
+    //             prev = this;
+    //             console.log('Current:', this.value);
+    //             activeradio = this.value;
+    //         });
+    //     }
+    // }
+    var rad = document.getElementsByName('foobar');
+    var prev = null;
+    for(var i = 0; i < rad.length; i++) {
+        rad[i].addEventListener('click', function() {
+            console.log('Previous:', prev ? prev.value : null);
+            prev = this;
+            console.log('Current:', this.value);
+            activeradio = this.value;
+            if(this.value == -1){
+                var el = document.getElementById('startdatepicker');
+                el.disabled="";
+                var el = document.getElementById('enddatepicker');
+                el.disabled="";
+            }
+            else{
+                var el = document.getElementById('startdatepicker');
+                el.disabled="disabled";
+                var el = document.getElementById('enddatepicker');
+                el.disabled="disabled";
+            }
+        });
+    }
 </script>
 </body>
 
