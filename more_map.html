@@ -250,71 +250,130 @@
                             <div id="filters" class="columns">
                                 <div class="column">
                                     <div class="field" id="datasetcontrol">
-                                    <label >Dataset: </label>
-                                        <select id="ddlDataset" class="control" onchange="populateFeatures();" onload="populateFeatures();">
+                                        <label >Dataset: </label>
+                                        <select id="ddlDataset" class="control" onchange="populateFeatures();populateFilters();" onload="populateFeatures();">
                                             <option>Census</option>
                                             <option>Water Resources</option>
                                             <option>Infrastructure</option>
-                                            <option>Resevoirs</option>
-                                                <option>NAM Data</option>
+                                            <option>NAM Data</option>
                                         </select>
                                     </div>
 
                                     <div id="featurecontrol" class="field">
-                                    <label>Features:</label>
-                                    <select id="ddlFeatures" class="control" onload="populateFeatures();">
-                                    </select>
-                                    <script>
-                                        //a hack to preload the features by launching a change event on page load
-                                        var element = document.getElementById('ddlDataset');
-                                        var event = new Event('change');
-                                        element.dispatchEvent(event);
+                                        <label>Features:</label>
+                                        <select id="ddlFeatures" class="control" onchange="populateFilters();">
+                                        </select>
+                                        <script>
+                                            //a hack to preload the features by launching a change event on page load
+                                            var element = document.getElementById('ddlDataset');
+                                            var event = new Event('change');
+                                            element.dispatchEvent(event);
 
-                                        function populateFeatures(){
-                                            var e = document.getElementById("ddlDataset");
-                                            document.getElementById("ddlFeatures").innerHTML = "";
-                                            var selectedValue = e.options[e.selectedIndex].value;
-                                            var selectedIndex = e.selectedIndex;
-                                            switch (selectedValue.toLowerCase()) {
-                                                case "census":
-                                                    var features = Object.keys(censusfeatures);
-                                                    var subs = Object.values(censusfeatures);
-                                                    var combo = Object.entries(censusfeatures);
-                                                    for(i = 0; i < features.length;i++){
-                                                        var newcatOptions = "<option>" + features[i] + "</option>";
-                                                        document.getElementById("ddlFeatures").innerHTML += newcatOptions;
-                                                    }
+                                            //Function to fill ddlFeatures according to ddlDataset
+                                            function populateFeatures(){
+                                                var e = document.getElementById("ddlDataset");
+                                                document.getElementById("ddlFeatures").innerHTML = "";
+                                                var selectedValue = e.options[e.selectedIndex].value;
+                                                var selectedIndex = e.selectedIndex;
+                                                switch (selectedValue.toLowerCase()) {
+                                                    case "census":
+                                                        var features = Object.keys(censusfeatures);
+                                                        var subs = Object.values(censusfeatures);
+                                                        var combo = Object.entries(censusfeatures);
+                                                        for(i = 0; i < features.length;i++){
+                                                            var newcatOptions = "<option>" + features[i] + "</option>";
+                                                            document.getElementById("ddlFeatures").innerHTML += newcatOptions;
+                                                        }
 
-                                                    break;
-                                                case "water resources":
-                                                    var features = Object.keys(waterfeatures);
-                                                    var subs = Object.values(waterfeatures);
-                                                    var combo = Object.entries(waterfeatures);
-                                                    for(i = 0; i < features.length;i++){
-                                                        var newcatOptions = "<option>" + features[i] + "</option>";
-                                                        document.getElementById("ddlFeatures").innerHTML += newcatOptions;
-                                                    }
-                                                    break;
-                                                case "infrastructure":
-                                                    // var features = Object.keys(infrafeatures);
-                                                    // var subs = Object.values(infrafeatures);
-                                                    // var combo = Object.entries(infrafeatures);
-                                                    for(i = 0; i < infrafeatures.length;i++){
-                                                        var newcatOptions = "<option>" + infrafeatures[i] + "</option>";
-                                                        document.getElementById("ddlFeatures").innerHTML += newcatOptions;
-                                                    }
-                                                    break;
+                                                        break;
+                                                    case "water resources":
+                                                        var features = Object.keys(waterfeatures);
+                                                        var subs = Object.values(waterfeatures);
+                                                        var combo = Object.entries(waterfeatures);
+                                                        for(i = 0; i < features.length;i++){
+                                                            var newcatOptions = "<option>" + features[i] + "</option>";
+                                                            document.getElementById("ddlFeatures").innerHTML += newcatOptions;
+                                                        }
+                                                        break;
+                                                    case "infrastructure":
+                                                        // var features = Object.keys(infrafeatures);
+                                                        // var subs = Object.values(infrafeatures);
+                                                        // var combo = Object.entries(infrafeatures);
+                                                        for(i = 0; i < infrafeatures.length;i++){
+                                                            var newcatOptions = "<option>" + infrafeatures[i] + "</option>";
+                                                            document.getElementById("ddlFeatures").innerHTML += newcatOptions;
+                                                        }
+                                                        break;
+                                                }
                                             }
-                                        }
 
-                                    </script>
+                                        </script>
+                                    </div>
+                                    <div class="field" id="featurefiltercontrols">
+                                        <label>Filters:</label>
+                                        <select id="ddlFilter" class="control" onload="populateFilters();">
+                                        </select>
+                                        <script>
+
+                                            //a hack to preload the features by launching a change event on page load
+                                            var element = document.getElementById('ddlFeatures');
+                                            var event = new Event('change');
+                                            element.dispatchEvent(event);
+
+                                            function populateFilters(){
+                                                var f = document.getElementById("ddlDataset");
+                                                var selectedDataset = f.options[f.selectedIndex].value;
+                                                var e = document.getElementById("ddlFeatures");
+                                                document.getElementById("ddlFilter").innerHTML = "";
+                                                var selectedValue = e.options[e.selectedIndex].value;
+                                                var selectedIndex = e.selectedIndex;
+                                                switch (selectedDataset.toLowerCase()) {
+                                                    case "census":
+                                                        document.getElementById("featurefiltercontrols").removeAttribute("style");
+                                                        var features = Object.keys(censusfeatures);
+                                                        var subs = Object.values(censusfeatures);
+                                                        var combo = Object.entries(censusfeatures);
+                                                        var relsubs = subs[selectedIndex];
+                                                        for(i = 0; i < relsubs.length;i++){
+                                                            var newcatOptions = "<option>" + relsubs[i] + "</option>";
+                                                            document.getElementById("ddlFilter").innerHTML += newcatOptions;
+                                                        }
+
+                                                        break;
+                                                    case "water resources":
+                                                        document.getElementById("featurefiltercontrols").removeAttribute("style");
+                                                        var features = Object.keys(waterfeatures);
+                                                        var subs = Object.values(waterfeatures);
+                                                        var combo = Object.entries(waterfeatures);
+                                                        var relsubs = subs[selectedIndex];
+                                                        for(i = 0; i < relsubs.length;i++){
+                                                            var newcatOptions = "<option>" + relsubs[i] + "</option>";
+                                                            document.getElementById("ddlFilter").innerHTML += newcatOptions;
+                                                        }
+                                                        break;
+                                                    case "infrastructure":
+                                                        //write a try catch and check if an exception is thrown with the message no keys/value then it is a list
+                                                        //if it is a list then hide sub filters
+                                                        // var features = Object.keys(infrafeatures);
+                                                        // var subs = Object.values(infrafeatures);
+                                                        // var combo = Object.entries(infrafeatures);
+                                                        //
+                                                        // for(i = 0; i < infrafeatures.length;i++){
+                                                        //     var newcatOptions = "<option>" + infrafeatures[i] + "</option>";
+                                                        //     document.getElementById("ddlFilter").innerHTML += newcatOptions;
+                                                        // }
+                                                        // break;
+                                                        document.getElementById("featurefiltercontrols").setAttribute("style","display:none");
+                                                }
+                                            }
+                                        </script>
                                     </div>
                                     <div id="shapeselector" class="field">
                                         <label >Spatial coverage: </label>
                                         <select  class="control" id="ddlshapeselector" data-allow-multiple="true"></select>
                                     </div>
-                                    <br/>
-                                    <div id="daterangecontrols">
+
+                                    <div id="daterangecontrols" class="field">
                                         <label>Date range: </label>
                                         <div class="control">
                                             <label class="radio">
@@ -379,22 +438,22 @@
                                         });
                                     </script>
                                 </div>
-                                <!--<div class="column">-->
-                                    <!--<button id="addfilter" class="button" onclick="addNewFilter(this);">Add</button>-->
-                                    <!--<script>-->
-                                        <!--function addNewFilter() {-->
-                                            <!--var el = document.getElementById("filters");-->
-                                            <!--var clone = el.cloneNode(true);-->
-                                            <!--//g = document.createElement("div");-->
-                                            <!--clone.setAttribute("id", "filters" + (Math.random().toString()));-->
-                                            <!--document.getElementById('filter-body').appendChild(clone);-->
-                                            <!--var message_body_height = $('#collapsible-message-accordion-second-2').height();-->
-                                            <!--$('#collapsible-message-accordion-second-2').height(message_body_height + 300);-->
+                            </div>
+                            <div id="launchbutton">
+                            <!--<button id="addfilter" class="button" onclick="addNewFilter(this);">Add</button>-->
+                            <script>
+                            function addNewFilter() {
+                            var el = document.getElementById("filters");
+                            var clone = el.cloneNode(true);
+                            //g = document.createElement("div");
+                            clone.setAttribute("id", "filters" + (Math.random().toString()));
+                            document.getElementById('filter-body').appendChild(clone);
+                            var message_body_height = $('#collapsible-message-accordion-second-2').height();
+                            $('#collapsible-message-accordion-second-2').height(message_body_height + 300);
 
-                                        <!--}-->
-                                    <!--</script>-->
-                                    <!--<button id="btnLaunch" class="button" onclick="captureArguments();">Launch</button>-->
-                                <!--</div>-->
+                            }
+                            </script>
+                            <button id="btnLaunch" class="button" onclick="captureArguments();">Launch</button>
                             </div>
                         </div>
                     </div>
@@ -1214,63 +1273,63 @@
 
 </script>
 <!--<script>-->
-    <!--//search for layers in layer control-->
-    <!--var i = 0;-->
-    <!--var targetlayer;-->
-    <!--for(i = 0 ;i < LayerControl._layers.length; i++){-->
-        <!--console.log(LayerControl._layers[i].name  )-->
-        <!--var searchtext = "midwest";-->
-        <!--if(searchtext.toLowerCase() === LayerControl._layers[i].name.toLowerCase()){-->
-            <!--targetlayer = LayerControl._layers[i];-->
-        <!--}-->
-    <!--}-->
+<!--//search for layers in layer control-->
+<!--var i = 0;-->
+<!--var targetlayer;-->
+<!--for(i = 0 ;i < LayerControl._layers.length; i++){-->
+<!--console.log(LayerControl._layers[i].name  )-->
+<!--var searchtext = "midwest";-->
+<!--if(searchtext.toLowerCase() === LayerControl._layers[i].name.toLowerCase()){-->
+<!--targetlayer = LayerControl._layers[i];-->
+<!--}-->
+<!--}-->
 
-    <!--console.log(targetlayer);-->
+<!--console.log(targetlayer);-->
 <!--</script>-->
 <!--<script>-->
-    <!--//continuatiuon of above search block-->
-    <!--//after locating the target layer, get its coordinates and encode it into a geohash, list of geohashes-->
+<!--//continuatiuon of above search block-->
+<!--//after locating the target layer, get its coordinates and encode it into a geohash, list of geohashes-->
 
-    <!--/*it is possible that the shape encompasses multiple geohash boxes.-->
-    <!--* First idea - pass the lat_lng of the vertices and get the geohashes for each */-->
+<!--/*it is possible that the shape encompasses multiple geohash boxes.-->
+<!--* First idea - pass the lat_lng of the vertices and get the geohashes for each */-->
 
-    <!--var i = 0;-->
-    <!--var targetlayer;-->
-    <!--var targetgeohash = [];-->
-    <!--for(i = 0 ;i < LayerControl._layers.length; i++){-->
-        <!--console.log(LayerControl._layers[i].name  );-->
-        <!--var searchtext = "midwest";-->
-        <!--if(searchtext.toLowerCase() === LayerControl._layers[i].name.toLowerCase()){-->
-            <!--targetlayer = LayerControl._layers[i];-->
-        <!--}-->
-    <!--}-->
-    <!--if(targetlayer==null){-->
-        <!--var drawnshapes = editableLayers.getLayers();-->
-        <!--console.log(drawnshapes.length);-->
-        <!--targetlayer = drawnshapes.pop();-->
-    <!--}-->
+<!--var i = 0;-->
+<!--var targetlayer;-->
+<!--var targetgeohash = [];-->
+<!--for(i = 0 ;i < LayerControl._layers.length; i++){-->
+<!--console.log(LayerControl._layers[i].name  );-->
+<!--var searchtext = "midwest";-->
+<!--if(searchtext.toLowerCase() === LayerControl._layers[i].name.toLowerCase()){-->
+<!--targetlayer = LayerControl._layers[i];-->
+<!--}-->
+<!--}-->
+<!--if(targetlayer==null){-->
+<!--var drawnshapes = editableLayers.getLayers();-->
+<!--console.log(drawnshapes.length);-->
+<!--targetlayer = drawnshapes.pop();-->
+<!--}-->
 
-    <!--console.log(targetlayer);-->
-    <!--console.log(targetlayer.layer._latlngs);-->
-    <!--console.log(targetlayer.layer._latlngs[0]);-->
-    <!--console.log(targetlayer.layer._latlngs[0][0].lat,targetlayer.layer._latlngs[0][0].lng);-->
-    <!--for(i=0;i < targetlayer.layer._latlngs.length;i++){-->
-        <!--console.log(-->
-            <!--encode_geohash(-->
-                <!--targetlayer.layer._latlngs[0][i].lat,-->
-                <!--targetlayer.layer._latlngs[0][i].lng,-->
-                <!--3-->
-            <!--)-->
-        <!--);-->
-        <!--targetgeohash.push(encode_geohash(-->
-            <!--targetlayer.layer._latlngs[0][i].lat,-->
-            <!--targetlayer.layer._latlngs[0][i].lng,-->
-            <!--3-->
-            <!--)-->
-        <!--);-->
+<!--console.log(targetlayer);-->
+<!--console.log(targetlayer.layer._latlngs);-->
+<!--console.log(targetlayer.layer._latlngs[0]);-->
+<!--console.log(targetlayer.layer._latlngs[0][0].lat,targetlayer.layer._latlngs[0][0].lng);-->
+<!--for(i=0;i < targetlayer.layer._latlngs.length;i++){-->
+<!--console.log(-->
+<!--encode_geohash(-->
+<!--targetlayer.layer._latlngs[0][i].lat,-->
+<!--targetlayer.layer._latlngs[0][i].lng,-->
+<!--3-->
+<!--)-->
+<!--);-->
+<!--targetgeohash.push(encode_geohash(-->
+<!--targetlayer.layer._latlngs[0][i].lat,-->
+<!--targetlayer.layer._latlngs[0][i].lng,-->
+<!--3-->
+<!--)-->
+<!--);-->
 
-    <!--}-->
-    <!--//console.log(sketch_visualizer()._searchForIntersectingGeohashes(this._standardizeBounds(targetlayer.layer._latlngs[0][0].lat,targetlayer.layer._latlngs[0][0].lng)))-->
+<!--}-->
+<!--//console.log(sketch_visualizer()._searchForIntersectingGeohashes(this._standardizeBounds(targetlayer.layer._latlngs[0][0].lat,targetlayer.layer._latlngs[0][0].lng)))-->
 <!--</script>-->
 <script>
     //populate shapeselection dropdown control

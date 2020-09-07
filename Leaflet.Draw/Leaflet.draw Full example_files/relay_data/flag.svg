@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>moonflag</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="moon" fill-rule="nonzero">
+            <rect id="Rectangle-path" fill="#49494D" x="245.34" y="0" width="21.328" height="277.33"></rect>
+            <path d="M256.004,256 C114.621,256 0.004,370.609 0.004,512 L511.996,512 C511.996,370.609 397.387,256 256.004,256 Z" id="Shape" fill="#E6E9ED"></path>
+            <polygon id="Shape" fill="#1FAF4D" points="479.996 170.656 330.668 170.656 330.668 42.656 479.996 42.656 458.684 106.656"></polygon>
+            <rect id="Rectangle-path" fill="#37DB6B" x="266.67" y="0" width="128" height="128"></rect>
+            <g id="Group" transform="translate(96.000000, 320.000000)" fill="#CCD1D9">
+                <path d="M64.004,106.656 C64.004,124.344 49.676,138.656 32.004,138.656 C14.332,138.656 0.004,124.344 0.004,106.656 C0.004,88.984 14.332,74.656 32.004,74.656 C49.676,74.656 64.004,88.984 64.004,106.656 Z" id="Shape"></path>
+                <circle id="Oval" cx="298.67" cy="117.33" r="32"></circle>
+                <path d="M202.668,42.656 C202.668,66.234 183.566,85.328 160.004,85.328 C136.442,85.328 117.34,66.234 117.34,42.656 C117.34,19.094 136.442,-5.68434189e-14 160.004,-5.68434189e-14 C183.566,-5.68434189e-14 202.668,19.094 202.668,42.656 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>
