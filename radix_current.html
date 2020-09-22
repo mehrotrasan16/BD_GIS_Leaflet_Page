@@ -40,9 +40,13 @@
     <script src="./leaflet plugins/L.Modal.min.js"></script>
     <link rel="stylesheet" href="./leaflet plugins/leaflet.modal.min.css">
 
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+
+
     <script src="./leaflet plugins/jquery-2.1.1.min.js"></script>
 
-    <script type="text/javascript" src="us-states-shapes.js"></script>
+    <script type="text/javascript" src="us_counties_geojson/us-states-shapes.js"></script>
     <script type="text/javascript" src="./us_counties_geojson/colorado_counties.js"></script>
     <script type="text/javascript" src="./us_counties_geojson/nm_counties.js"></script>
 
@@ -510,8 +514,8 @@
             maxZoom: 18,
         }).addTo(map);
 
-        //Read the state data shapes present in us-state.js
-        //add the statesData layer to the map
+        // Read the state data shapes present in us-state.js
+        // add the statesData layer to the map
         //L.geoJson(statesData).addTo(map);
         var geoJson; //used later put here for global scope
     </script>
@@ -555,9 +559,6 @@
         // Initialise the draw control and pass it the FeatureGroup of editable layers
         var drawControl = new L.Control.Draw(options);
         map.addControl(drawControl);
-
-        //var editableLayers = new L.FeatureGroup();
-        //map.addLayer(editableLayers);
 
         map.on("draw:created", function (e) {
             var type = e.layerType,
