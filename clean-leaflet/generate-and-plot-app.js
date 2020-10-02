@@ -94,8 +94,7 @@ map.on("draw:created", function (e) {
 });
 //////////////////////////END DRAW CONTROL ON THE MAP
 
-
-//////////////////////////start fullscreen CONTROL ON THE MAP
+//fullscreen control
 map.addControl(new L.Control.Fullscreen());
 map.on('fullscreenchange', function () {
     if (map.isFullscreen()) {
@@ -107,16 +106,16 @@ map.on('fullscreenchange', function () {
         fscrinfo.remove();
     }
 });
-//////////////////////////end fullscreen CONTROL ON THE MAP
 
-// //////////////////////////START Minimap CONTROL ON THE MAP
-// var osmUrl = "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}"; //"http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-// var osmAttrib = "Map data &copy; OpenStreetMap contributors";
-// //Minimap Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
-// var osm2 = new L.TileLayer(osmUrl, { minZoom: 0, maxZoom: 11 });
-// var minimap_options={ toggleDisplay: true, width: 200, height: 200, collapsedHeight:19,collapsedWidth:19,zoomOffset:map.getZoom()-1 }
-// var miniMap = new L.Control.MiniMap(osm2,minimap_options).addTo(map);
-// //////////////////////////END Minimap CONTROL ON THE MAP
+
+//Minimap control
+var osmUrl = "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}"; //"http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+var osmAttrib = "Map data &copy; OpenStreetMap contributors";
+//Minimap Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
+var osm2 = new L.TileLayer(osmUrl, { minZoom: 0, maxZoom: 11 });
+var minimap_options={ toggleDisplay: true, width: 200, height: 200, collapsedHeight:19,collapsedWidth:19,zoomOffset:map.getZoom()-1 }
+var miniMap = new L.Control.MiniMap(osm2,minimap_options).addTo(map);
+// new MiniMap(layer, options).addTo(map);
 
 /*Performance check by adding large  number of circle markers*/
 // control that shows state info on hover
@@ -134,24 +133,38 @@ info.update = function (props,state="") {
 
 info.addTo(map);
 
-const starttime = Date.now();
-var preplotpoints = [];
-for(i = 0; i < 500000;i++){
-    var point = drawControlimport.getRandomLatLng(map)
-    if(preplotpoints.indexOf(point) === -1) preplotpoints.push(point);
-    var marker = new L.circle(preplotpoints[i]);
-    map.addLayer(marker);
-    if(i % 1000 === 0){
-        console.log(i);
-    }
-}
-updateProps = {
-        name: preplotpoints.length,
-        timestamp: Date.now() - starttime,
-    };
-info.update(updateProps);
-console.log(" plotting 100 stored points takes" + (Date.now() - starttime).toString() +"ms ");
+const allCircles = [];
+var circlecounter = 0;
+const startTime = Date.now();
+const circlesUpdater = setInterval(() => {
+    allCircles.forEach(circleMeta => {
+    });
 
+    updateProps = {
+        name: allCircles.length,
+        timestamp: Date.now() - startTime,
+    };
+    info.update(updateProps);
+
+    if (circlecounter > 2000) {
+        clearInterval(circlesUpdater);
+    }
+    const newCircle = L.circle(drawControlimport.getRandomLatLng(map), 50, {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5
+    }).addTo(map);
+
+    circlecounter++;
+
+    allCircles.push({
+        circle: newCircle,
+        theta: 1// (Math.random() * 2) - 1,
+    });
+    if(allCircles.length % 100 == 0){
+        console.log("Plotting " + allCircles.length.toString() + " takes "+ (Date.now() - startTime).toString() + "ms" );
+    }
+},5)
 
 module.exports = {
     map
