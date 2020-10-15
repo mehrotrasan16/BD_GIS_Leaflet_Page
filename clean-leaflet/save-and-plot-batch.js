@@ -136,7 +136,7 @@ info.addTo(map);
 
 const starttime = Date.now();
 var preplotpoints = [];
-for(i = 0; i < 25000;i++){
+for(i = 0; i < 250000;i++){
     var point = drawControlimport.getRandomLatLng(map)
     if(preplotpoints.indexOf(point) === -1) preplotpoints.push(point);
     var marker = new L.circle(preplotpoints[i]);
@@ -150,8 +150,8 @@ updateProps = {
     timestamp: Date.now() - starttime,
 };
 info.update(updateProps);
-console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + ((Date.now() - starttime)/1000).toString() +" seconds ");
-console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + (performance.memory.usedJSHeapSize / 1000000).toString() + " Mbytes ");
+console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes" + (Date.now() - starttime).toString() +"ms ");
+console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes" + performance.memory.usedJSHeapSize.toString + "ms ");
 
 
 module.exports = {
