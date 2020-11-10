@@ -4,7 +4,7 @@ var Lfullscreen = require('leaflet-fullscreen')
 var MiniMap = require('leaflet-minimap');
 //var markercluster = require('leaflet-markercluster');
 
-var drawControlimport = require('./drawControl.js');
+var utils = require('./utils.js');
 
 L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
@@ -14,7 +14,7 @@ var center = [40.5853, -105.0844];
 
 // Create the map
 var map = L.map('map');
-map.setView(center, 6);
+map.setView(center, 5);
 
 var tiles = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 // Set up the OSM layer
@@ -28,6 +28,21 @@ mainlayer.addTo(map);
 //Add the map scale
 L.control.scale().addTo(map);
 
+
+
+//////////////////////////////On click interactivity
+var popup = L.popup();
+function onMapClick(e) {
+    map.flyTo(e.latlng);
+    popup
+        .setLatLng(e.latlng)
+        .setContent("<strong>" + e.latlng.lat.toFixed(2).toString() + "," + e.latlng.lng.toFixed(2).toString() + "</strong>")
+        .openOn(map);
+    //breadcrumb update
+}
+
+map.on("click", onMapClick);
+/////////////////////////////END on click interactivity
 
 //////////////////////////DRAW CONTROL ON THE MAP
 
@@ -134,13 +149,45 @@ info.update = function (props,state="") {
 
 info.addTo(map);
 
+var drawnLayers = new L.FeatureGroup();
+map.addLayer(drawnLayers);
+drawnLayers.on('click', onLayerClick);
+
+function onLayerClick(e)
+{
+    let type = e.layerType,
+        layer = e.layer;
+    if (type === 'polygon') {
+        //polygons.push(e.layer);
+        let area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+        console.log("New polygon area: " + area);
+    }
+
+    if (type === 'rectangle') {
+        //rectangles.push(e.layer);
+        let area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+        console.log("New rectangle area: " + area);
+    }
+}
+
 const starttime = Date.now();
 var preplotpoints = [];
-for(i = 0; i < 25000;i++){
-    var point = drawControlimport.getRandomLatLng(map)
-    if(preplotpoints.indexOf(point) === -1) preplotpoints.push(point);
-    var marker = new L.circle(preplotpoints[i]);
-    map.addLayer(marker);
+for(i = 0; i < 20;i++){
+    var fig = utils.getRandomGeoJson(map,"Polygon",5)
+    if(preplotpoints.indexOf(fig) === -1) preplotpoints.push(fig);
+    drawnLayers.addLayer(L.geoJSON(fig, {
+        style: function (feature) {
+            return {"color": "#f8984f"}
+        }
+    })
+    );
+
+    //code to try to add all shapes to one layer
+    // var one_layer_id = drawnLayers.getLayers()[0]._leaflet_id;
+    // console.log(one_layer_id);
+    // drawnLayers.getLayers().forEach(element => console.log(element._leaflet_id));
+    //END code to try to add all shapes to one layer
+
     if(i % 1000 === 0){
         console.log(i);
     }

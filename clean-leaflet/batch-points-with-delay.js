@@ -4,7 +4,7 @@ var Lfullscreen = require('leaflet-fullscreen')
 var MiniMap = require('leaflet-minimap');
 //var markercluster = require('leaflet-markercluster');
 
-var drawControlimport = require('./drawControl.js');
+var utils = require('./utils.js');
 
 L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
@@ -149,7 +149,7 @@ const circlesUpdater = setInterval(() => {
     if (circlecounter > 2000) {
         clearInterval(circlesUpdater);
     }
-    const newCircle = L.circle(drawControlimport.getRandomLatLng(map), 50, {
+    const newCircle = L.circle(utils.getRandomLatLng(map), 50, {
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.5

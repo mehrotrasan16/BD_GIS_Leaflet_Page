@@ -4,7 +4,7 @@ var Lfullscreen = require('leaflet-fullscreen')
 var MiniMap = require('leaflet-minimap');
 //var markercluster = require('leaflet-markercluster');
 
-var drawControlimport = require('./drawControl.js');
+var drawControlimport = require('./utils.js');
 
 L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
