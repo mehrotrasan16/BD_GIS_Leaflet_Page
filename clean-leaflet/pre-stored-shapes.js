@@ -2,14 +2,13 @@ var L = require('leaflet');
 var LD = require('leaflet-draw')
 var Lfullscreen = require('leaflet-fullscreen')
 var MiniMap = require('leaflet-minimap');
+//ADD to index.html or import using require.
+// <script type="text/javascript" src="../us_counties_geojson/us_counties.js"></script>
+// <script type="text/javascript" src="../us_counties_geojson/colo_tracts.js"></script>
+var colotracts = require('../us_counties_geojson/colo_tracts')
 //var markercluster = require('leaflet-markercluster');
+
 var utils = require('./utils.js');
-var LAjax = require('leaflet-ajax');
-
-// var tract01 = require('../us_counties_geojson/USA-tract-geojson-js/cb_2018_01_tract_500k.json.js');
-// var tract02 = require('../us_counties_geojson/USA-tract-geojson-js/cb_2018_02_tract_500k.json.js');
-// var tract04 = require('../us_counties_geojson/USA-tract-geojson-js/cb_2018_04_tract_500k.json.js');
-
 
 L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
@@ -32,6 +31,8 @@ mainlayer.addTo(map);
 
 //Add the map scale
 L.control.scale().addTo(map);
+
+
 
 //////////////////////////////On click interactivity
 // var popup = L.popup();
@@ -137,7 +138,7 @@ map.on('fullscreenchange', function () {
 // //////////////////////////END Minimap CONTROL ON THE MAP
 
 /*Performance check by adding large  number of circle markers*/
-////////////// control that shows state info on hover
+// control that shows state info on hover
 var info = L.control();
 
 info.onAdd = function (map) {
@@ -151,71 +152,97 @@ info.update = function (props,state="") {
 };
 
 info.addTo(map);
-////////////END control that shows state info on hover
 
-function getJSONP(url, success) {
-    // https://stackoverflow.com/questions/2499567/how-to-make-a-json-call-to-a-url/2499647#2499647
-    var ud = '_' + +new Date,
-        script = document.createElement('script'),
-        head = document.getElementsByTagName('head')[0]
-            || document.documentElement;
+// var drawnLayers = new L.FeatureGroup();
+// map.addLayer(drawnLayers);
+// drawnLayers.on('click', onLayerClick);
+//
+// function onLayerClick(e)
+// {
+//     let type = e.layerType,
+//         layer = e.layer;
+//     if (type === 'polygon') {
+//         //polygons.push(e.layer);
+//         layer.bindPopup(feature.properties.name)
+//         // let area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+//         // console.log("New polygon area: " + area);
+//     }
+//
+//     if (type === 'rectangle') {
+//         //rectangles.push(e.layer);
+//         let area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+//         console.log("New rectangle area: " + area);
+//     }
+// }
 
-    window[ud] = function(data) {
-        head.removeChild(script);
-        success && success(data);
-    };
-
-    script.src = url.replace('callback=?', 'callback=' + ud);
-    head.appendChild(script);
-
+function onEachFeature(feature, layer) {
+    console.log(layer.bindPopup(feature.properties.NAME));
+    // if (feature.properties && feature.properties.name) {
+    //     layer.bindPopup(feature.properties.name);
+    // }
+    preplotpoints.push(feature.properties.name);
 }
-
-getJSONP('https://tmpfiles.org/dl/99396/cb_2018_01_tract_500k.json.js') // from https://tmpfiles.org/download/99396/cb_2018_01_tract_500k.json.js
-
 
 const starttime = Date.now();
-function onEachFeature(feature, layer) {
-    // console.log(feature.properties.NAME);
-    if (feature.properties && feature.properties.name) {
-        layer.bindPopup(feature.properties.NAME);
-    }
-    preplotpoints.push(feature.properties.NAME);
-}
+
+// var method = 'GET'
+// var URL = 'https://eric.clst.org/assets/wiki/uploads/Stuff/gz_2010_us_050_00_500k.json'
+// let xhr = new XMLHttpRequest();
+// xhr.responseType = 'json';
+// xhr.open(method, URL);
+// xhr.send();
+//
+// // 4. This will be called after the response is received
+// xhr.onload = function() {
+//     if (xhr.status != 200) { // analyze HTTP status of the response
+//         alert(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+//     } else { // show the result
+//         alert(`Done, got ${xhr.response.length} bytes`); // response is the server
+//     }
+// };
+//
+// xhr.onprogress = function(event) {
+//     if (event.lengthComputable) {
+//         alert(`Received ${event.loaded} of ${event.total} bytes`);
+//     } else {
+//         alert(`Received ${event.loaded} bytes`); // no Content-Length
+//     }
+//
+// };
+//
+// xhr.onerror = function() {
+//     alert("Request failed");
+// };
+
 var preplotpoints = [];
-// editableLayers.addLayer(L.geoJSON(tract_01, {
+editableLayers.addLayer(L.geoJSON(colotracts, {
+    style: function (feature) {
+        return {"color": "#f8984f"}
+    },
+    onEachFeature:onEachFeature
+})
+);
+
+// for(i = 0; i < 25;i++){
+//     var fig = utils.getRandomGeoJson(map,"Polygon",50)
+//     if(preplotpoints.indexOf(fig) === -1) preplotpoints.push(fig);
+//     drawnLayers.addLayer(L.geoJSON(fig, {
 //         style: function (feature) {
 //             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
+//         }
 //     })
-// );
-editableLayers.addLayer(LAjax.GeoJSON.AJAX("https://tmpfiles.org/dl/99396/cb_2018_01_tract_500k.json.js"));
-
-console.log("Features in Alabama:" + preplotpoints.length.toString());
-editableLayers.addLayer(L.geoJSON(tract_02, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-console.log("Features in Alabama+Alaska:" + preplotpoints.length.toString());
-editableLayers.addLayer(L.geoJSON(tract_04, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-console.log("Features in Alabama+Alaska+Arizona:" + preplotpoints.length.toString());
-editableLayers.addLayer(L.geoJSON(tract_05, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-console.log("Features in Alabama+Alaska+Arizona+Arkansas:" + preplotpoints.length.toString());
+//     );
+//
+//     //code to try to add all shapes to one layer
+//     // var one_layer_id = drawnLayers.getLayers()[0]._leaflet_id;
+//     // console.log(one_layer_id);
+//     // drawnLayers.getLayers().forEach(element => console.log(element._leaflet_id));
+//     //END code to try to add all shapes to one layer
+//
+//     if(i % 1000 === 0){
+//         console.log(i);
+//     }
+// }
 updateProps = {
     name: preplotpoints.length,
     timestamp: Date.now() - starttime,
