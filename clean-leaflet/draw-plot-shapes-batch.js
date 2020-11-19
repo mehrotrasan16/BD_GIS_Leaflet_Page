@@ -4,12 +4,6 @@ var Lfullscreen = require('leaflet-fullscreen')
 var MiniMap = require('leaflet-minimap');
 //var markercluster = require('leaflet-markercluster');
 var utils = require('./utils.js');
-var LAjax = require('leaflet-ajax');
-
-// var tract01 = require('../us_counties_geojson/USA-tract-geojson-js/cb_2018_01_tract_500k.json.js');
-// var tract02 = require('../us_counties_geojson/USA-tract-geojson-js/cb_2018_02_tract_500k.json.js');
-// var tract04 = require('../us_counties_geojson/USA-tract-geojson-js/cb_2018_04_tract_500k.json.js');
-
 
 L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
@@ -34,17 +28,17 @@ mainlayer.addTo(map);
 L.control.scale().addTo(map);
 
 //////////////////////////////On click interactivity
-// var popup = L.popup();
-// function onMapClick(e) {
-//     map.flyTo(e.latlng);
-//     popup
-//         .setLatLng(e.latlng)
-//         .setContent("<strong>" + e.latlng.lat.toFixed(2).toString() + "," + e.latlng.lng.toFixed(2).toString() + "</strong>")
-//         .openOn(map);
-//     //breadcrumb update
-// }
-//
-// map.on("click", onMapClick);
+var popup = L.popup();
+function onMapClick(e) {
+    map.flyTo(e.latlng);
+    popup
+        .setLatLng(e.latlng)
+        .setContent("<strong>" + e.latlng.lat.toFixed(2).toString() + "," + e.latlng.lng.toFixed(2).toString() + "</strong>")
+        .openOn(map);
+    //breadcrumb update
+}
+
+map.on("click", onMapClick);
 /////////////////////////////END on click interactivity
 
 //////////////////////////DRAW CONTROL ON THE MAP
@@ -153,69 +147,17 @@ info.update = function (props,state="") {
 info.addTo(map);
 ////////////END control that shows state info on hover
 
-function getJSONP(url, success) {
-    // https://stackoverflow.com/questions/2499567/how-to-make-a-json-call-to-a-url/2499647#2499647
-    var ud = '_' + +new Date,
-        script = document.createElement('script'),
-        head = document.getElementsByTagName('head')[0]
-            || document.documentElement;
-
-    window[ud] = function(data) {
-        head.removeChild(script);
-        success && success(data);
-    };
-
-    script.src = url.replace('callback=?', 'callback=' + ud);
-    head.appendChild(script);
-
-}
-
-getJSONP('https://tmpfiles.org/dl/99396/cb_2018_01_tract_500k.json.js') // from https://tmpfiles.org/download/99396/cb_2018_01_tract_500k.json.js
-
-
 const starttime = Date.now();
-function onEachFeature(feature, layer) {
-    // console.log(feature.properties.NAME);
-    if (feature.properties && feature.properties.name) {
-        layer.bindPopup(feature.properties.NAME);
-    }
-    preplotpoints.push(feature.properties.NAME);
-}
 var preplotpoints = [];
-// editableLayers.addLayer(L.geoJSON(tract_01, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-editableLayers.addLayer(LAjax.GeoJSON.AJAX("https://tmpfiles.org/dl/99396/cb_2018_01_tract_500k.json.js"));
-
-console.log("Features in Alabama:" + preplotpoints.length.toString());
-editableLayers.addLayer(L.geoJSON(tract_02, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-console.log("Features in Alabama+Alaska:" + preplotpoints.length.toString());
-editableLayers.addLayer(L.geoJSON(tract_04, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-console.log("Features in Alabama+Alaska+Arizona:" + preplotpoints.length.toString());
-editableLayers.addLayer(L.geoJSON(tract_05, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-console.log("Features in Alabama+Alaska+Arizona+Arkansas:" + preplotpoints.length.toString());
+for(i = 0; i < 150;i++){
+    var fig = utils.getRandomGeoJson(map,"Polygon",10)
+//    if(preplotpoints.indexOf(fig) === -1) preplotpoints.push(fig); //unique lines condition
+    preplotpoints.push(fig);
+    editableLayers.addLayer(L.geoJSON(fig));
+    if(i % 50000 === 0){
+        console.log(i);
+    }
+}
 updateProps = {
     name: preplotpoints.length,
     timestamp: Date.now() - starttime,

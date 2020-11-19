@@ -16,6 +16,7 @@ function getRandomLatLng(map) {
 exports.getRandomLatLng = getRandomLatLng;
 
 function getRandomGeoJson(map,type,n_points){
+    // https://geojsonlint.com/ - for samples
     var i;
     var templatlng = [];
 
