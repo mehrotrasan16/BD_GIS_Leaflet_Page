@@ -5,58 +5,6 @@ var MiniMap = require('leaflet-minimap');
 var utils = require('./utils.js');
 var LAjax = require('leaflet-ajax');
 
-
-
-var tract_01 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_01_tract_500k.json');
-var tract_02 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_02_tract_500k.json');
-var tract_04 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_04_tract_500k.json');
-var tract_05 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_05_tract_500k.json');
-var tract_06 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_06_tract_500k.json');
-var tract_08 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_08_tract_500k.json');
-var tract_09 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_09_tract_500k.json');
-var tract_10 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_10_tract_500k.json');
-var tract_11 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_11_tract_500k.json');
-var tract_12 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_12_tract_500k.json');
-var tract_13 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_13_tract_500k.json');
-var tract_15 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_15_tract_500k.json');
-var tract_16 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_16_tract_500k.json');
-var tract_17 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_17_tract_500k.json');
-var tract_18 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_18_tract_500k.json');
-var tract_19 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_19_tract_500k.json');
-var tract_20 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_20_tract_500k.json');
-var tract_21 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_21_tract_500k.json');
-var tract_22 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_22_tract_500k.json');
-var tract_23 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_23_tract_500k.json');
-var tract_24 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_24_tract_500k.json');
-var tract_25 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_25_tract_500k.json');
-var tract_26 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_24_tract_500k.json');
-var tract_27 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_27_tract_500k.json');
-var tract_28 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_28_tract_500k.json');
-var tract_29 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_29_tract_500k.json');
-var tract_30 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_30_tract_500k.json');
-var tract_31 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_31_tract_500k.json');
-var tract_32 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_32_tract_500k.json');
-var tract_33 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_33_tract_500k.json');
-var tract_34 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_34_tract_500k.json');
-var tract_35 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_35_tract_500k.json');
-var tract_36 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_36_tract_500k.json');
-var tract_37 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_37_tract_500k.json');
-var tract_38 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_38_tract_500k.json');
-var tract_39 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_39_tract_500k.json');
-var tract_40 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_40_tract_500k.json');
-var tract_41 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_41_tract_500k.json');
-var tract_42 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_42_tract_500k.json');
-// var tract_43 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_43_tract_500k.json');
-var tract_44 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_44_tract_500k.json');
-var tract_45 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_45_tract_500k.json');
-var tract_46 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_46_tract_500k.json');
-var tract_47 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_47_tract_500k.json');
-var tract_48 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_48_tract_500k.json');
-var tract_49 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_49_tract_500k.json');
-var tract_50 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_50_tract_500k.json');
-var tract_51 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_51_tract_500k.json');
-var tract_53 = require('../../Data/tract-data/USA-cb_tract_500k-geojson/cb_2018_53_tract_500k.json');
-
 L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
 /* Base Setup of the Map*/
@@ -198,348 +146,64 @@ function onEachFeature(feature, layer) {
     preplotpoints.push(feature.properties.NAME);
 }
 var preplotpoints = [];
-editableLayers.addLayer(L.geoJSON(tract_01, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-console.log("Features in Alabama:" + preplotpoints.length.toString());
 
-// editableLayers.addLayer(L.geoJSON(tract_02, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// console.log("Features in Alabama+Alaska:" + preplotpoints.length.toString());
+//https://medium.com/@maptastik/loading-external-geojson-a-nother-way-to-do-it-with-jquery-c72ae3b41c01 dynamically load geojson
+// var counties = $.ajax({
+//     url:"https://gist.githubusercontent.com/maptastik/df8e483d5ac1c6cae3dc4a7c02ea9039/raw/9cd46849bddcfa90aab240772a12275408d6d8d0/kyCounties.geojson",
+//     dataType: "json",
+//     success: console.log("County data successfully loaded."),
+//     error: function (xhr) {
+//         alert(xhr.statusText)
+//     }
+// })
+
+// var stateshape = $.ajax({
+//     url: "https://raw.githubusercontent.com/mehrotrasan16/us-census-tracts-shapefiles-and-geojson/master/USA-cb_tract_500k-geojson/cb_2018_01_tract_500k.json",
+//     dataType: "json",
+//     success: console.log("Sweeet hoommee Alabama!"),
+//     error: function (xhr){
+//         alert(xhr.statusText);
+//     }
+// })
+// // Specify that this code should run once the county data request is complete
+// $.when(counties).done(function() {
+//     editableLayers.addLayer(L.geoJSON(counties.responseJSON,{
+//         onEachFeature: onEachFeature
+//         })
+//     );
+// });
 //
-// editableLayers.addLayer(L.geoJSON(tract_04, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-//console.log("Features in Alabama+Alaska+Arizona:" + preplotpoints.length.toString());
-// editableLayers.addLayer(L.geoJSON(tract_05, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// console.log("Features in Alabama+Alaska+Arizona+Arkansas:" + preplotpoints.length.toString());
-// editableLayers.addLayer(L.geoJSON(tract_06, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-editableLayers.addLayer(L.geoJSON(tract_08, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
+
+var stateshapes = [];
+for(i = 1 ; i < 5; i++){
+    let statenumber=(i < 10)? '0'+i.toString():i.toString()
+    let filename='cb_2018_'+statenumber+'_tract_500k.json';
+    stateshapes[i] = $.ajax({
+        url: "https://raw.githubusercontent.com/mehrotrasan16/us-census-tracts-shapefiles-and-geojson/master/USA-cb_tract_500k-geojson/"+filename,
+        dataType: "json",
+        success: function (data){
+            console.log(filename + " Retrieved");
+            console.log(data);
+            editableLayers.addLayer(L.geoJSON(data,{
+                                onEachFeature: onEachFeature
+                            })
+                        );
         },
-        onEachFeature:onEachFeature
+        error: function (xhr){
+            console.log(xhr.statusText);
+            //alert(xhr.statusText);
+        }
     })
-);
-editableLayers.addLayer(L.geoJSON(tract_09, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-editableLayers.addLayer(L.geoJSON(tract_10, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-editableLayers.addLayer(L.geoJSON(tract_11, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-editableLayers.addLayer(L.geoJSON(tract_53, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-// editableLayers.addLayer(L.geoJSON(tract_12, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-editableLayers.addLayer(L.geoJSON(tract_13, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-editableLayers.addLayer(L.geoJSON(tract_15, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-editableLayers.addLayer(L.geoJSON(tract_16, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-editableLayers.addLayer(L.geoJSON(tract_17, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-editableLayers.addLayer(L.geoJSON(tract_18, {
-        style: function (feature) {
-            return {"color": "#f8984f"}
-        },
-        onEachFeature:onEachFeature
-    })
-);
-// editableLayers.addLayer(L.geoJSON(tract_19, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_20, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_21, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_22, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_23, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_24, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_25, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_26, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_27, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_28, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_29, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_30, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_31, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_32, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_33, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_34, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_35, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_36, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_37, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_38, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_39, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_40, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_41, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_42, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_44, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_45, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_46, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_47, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_48, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_49, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_50, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
-// editableLayers.addLayer(L.geoJSON(tract_51, {
-//         style: function (feature) {
-//             return {"color": "#f8984f"}
-//         },
-//         onEachFeature:onEachFeature
-//     })
-// );
+    // $.when(stateshapes[i]).done(function() {
+    //     editableLayers.addLayer(L.geoJSON(stateshapes[i].responseJSON,{
+    //             onEachFeature: onEachFeature
+    //         })
+    //     );
+    // });
+
+}
+
+console.log(preplotpoints);
 
 updateProps = {
     name: preplotpoints.length,
