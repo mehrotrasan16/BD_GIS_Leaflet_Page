@@ -26,11 +26,10 @@
   "license": "ISC",
   "dependencies": {
     "leaflet": "^1.7.1",
-    "leaflet-draw": "^1.0.4",
     "leaflet-ajax": "^2.1.0",
+    "leaflet-draw": "^1.0.4",
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-minimap": "^3.6.1",
-    "leaflet.markercluster": "^1.4.1",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },
