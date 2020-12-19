@@ -1,9 +1,8 @@
 var L = require('leaflet');
 var LD = require('leaflet-draw')
 var Lfullscreen = require('leaflet-fullscreen')
-var MiniMap = require('leaflet-minimap');
 var utils = require('./utils.js');
-var LAjax = require('leaflet-ajax');
+var random = require('geojson-random');
 
 L.Icon.Default.imagePath = 'node_modules/leaflet/dist/images/';
 
@@ -130,7 +129,7 @@ info.onAdd = function (map) {
     return this._div;
 };
 
-info.update = function (props,state="") {
+info.update = function (props) {
     this._div.innerHTML = "<h4>Test: </h4>" + (props ? "<b id='num_shapes'>" + props.name.toString() +", " + props.timestamp.toString() + " ms</b><br />" : "Starting Experiment");
 };
 
@@ -144,6 +143,8 @@ function onEachFeature(feature, layer) {
     }
     preplotpoints.push(feature.properties.NAME);
 }
+
+
 
 var preplotpoints = [];
 function getLoadData(num_states){
@@ -177,7 +178,7 @@ function getLoadData(num_states){
                 //alert(xhr.statusText);
             },
             complete: function(data) {
-                if(i == num_states){
+                if(i === num_states){
                     console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + ((Date.now() - starttime)/1000).toString() +" seconds ");
                     console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + (performance.memory.usedJSHeapSize / 1000000).toString() + " Mbytes ");
                 }
@@ -192,8 +193,116 @@ function getLoadData(num_states){
     }
 }
 
-getLoadData(10);
+// getLoadData(30);
 
-module.exports = {
-    map
+function getGeneratePoints(num_points) {
+    const starttime = Date.now();
+    let geojson_fc = random.point(num_points,[-60.95, 25.84 , -130.67, 49.38]); //WSEN
+    console.log(geojson_fc);
+    editableLayers.addLayer(L.geoJson(geojson_fc,{
+        onEachFeature: onEachFeature,
+        pointToLayer: function (geoJsonPoint,latlng){
+            return L.circle(latlng);
+        }
+    }));
+
+    updateProps = {
+        name: preplotpoints.length,
+        timestamp: Date.now() - starttime,
+    };
+
+    info.update(updateProps);
+
+    console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + ((Date.now() - starttime)/1000).toString() +" seconds ");
+    console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + (performance.memory.usedJSHeapSize / 1000000).toString() + " Mbytes ");
+
 }
+
+
+function getLoadPoints(num_point_files){
+    var points = [];
+    const starttime = Date.now();
+    for(i = 1 ; i <= num_point_files; i++){
+        let filename='points_run_'+ i.toString()+'.json';
+        points[i] = $.ajax({
+            url: "https://raw.githubusercontent.com/mehrotrasan16/us-census-tracts-shapefiles-and-geojson/master/point-data/"+filename,
+            dataType: "json",
+            success: function (data){
+                console.log(filename + " Retrieved");
+                editableLayers.addLayer(L.geoJSON(data,{
+                        onEachFeature: onEachFeature,
+                        pointToLayer: function (geoJsonPoint,latlng){
+                            return L.circle(latlng);
+                        }
+                    }
+                    )
+                );
+
+                updateProps = {
+                    name: preplotpoints.length,
+                    timestamp: Date.now() - starttime,
+                };
+
+                info.update(updateProps);
+            },
+            error: function (xhr){
+                console.log(xhr.statusText);
+                //alert(xhr.statusText);
+            },
+            complete: function(data) {
+                if(i === num_point_files){
+                    console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + ((Date.now() - starttime)/1000).toString() +" seconds ");
+                    console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + (performance.memory.usedJSHeapSize / 1000000).toString() + " Mbytes ");
+                }
+            }
+        })
+    }
+    return i;
+}
+// getLoadPoints(4)
+
+function getLoadShapes(num_shape_files){
+    var shapes = [];
+    const starttime = Date.now();
+    for(i = 1 ; i <= num_shape_files; i++){
+        let filename='pentagons_run_' + i.toString() + '.json' //petagons_run_'+ i.toString()+'.json';
+        shapes[i] = $.ajax({
+            url: "https://raw.githubusercontent.com/mehrotrasan16/us-census-tracts-shapefiles-and-geojson/master/shape-data/"+filename,
+            dataType: "json",
+            success: function (data){
+                console.log(filename + " Retrieved");
+                editableLayers.addLayer(L.geoJSON(data,{
+                        onEachFeature: onEachFeature,
+                        pointToLayer: function (geoJsonPoint,latlng){
+                            return L.circle(latlng);
+                        }
+                    }
+                    )
+                );
+
+                updateProps = {
+                    name: preplotpoints.length,
+                    timestamp: Date.now() - starttime,
+                };
+
+                info.update(updateProps);
+            },
+            error: function (xhr){
+                console.log(xhr.statusText);
+                //alert(xhr.statusText);
+            },
+            complete: function(data) {
+                if(i === num_shape_files){
+                    console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + ((Date.now() - starttime)/1000).toString() +" seconds ");
+                    console.log(" plotting "+ preplotpoints.length.toString() +"stored points takes " + (performance.memory.usedJSHeapSize / 1000000).toString() + " Mbytes ");
+                }
+            }
+        })
+    }
+}
+// module.exports = {
+//     map,getLoadPoints, getLoadData,getLoadShapes
+// }
+window.getLoadPoints = getLoadPoints;
+window.getLoadShapes = getLoadShapes;
+window.getLoadData = getLoadData;
