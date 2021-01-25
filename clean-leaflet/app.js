@@ -144,9 +144,8 @@ function onEachFeature(feature, layer) {
     preplotpoints.push(feature.properties.NAME);
 }
 
-
-
 var preplotpoints = [];
+
 function getLoadData(num_states){
     var stateshapes = [];
     // let num_states = 30
@@ -300,9 +299,14 @@ function getLoadShapes(num_shape_files){
         })
     }
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 // module.exports = {
 //     map,getLoadPoints, getLoadData,getLoadShapes
 // }
 window.getLoadPoints = getLoadPoints;
 window.getLoadShapes = getLoadShapes;
 window.getLoadData = getLoadData;
+window.sleep = sleep;
